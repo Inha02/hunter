@@ -2,14 +2,16 @@ import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import axios from 'axios';
 import './App.css';
+import NaverLoginButton from "./components/naverLoginButton";
 
-function App() {
+const App: React.FC = () => {
   const [message, setMessage] = useState<string>('');
 
+  // 백엔드 API 호출
   useEffect(() => {
     axios.get('http://localhost:5001/api/example') // 백엔드 API URL
       .then((response) => {
-        // 응답 데이터를 상태에 저장합니다.
+        // 응답 데이터를 상태에 저장
         setMessage(response.data.message);
       })
       .catch((error) => {
@@ -24,7 +26,6 @@ function App() {
         <h1>React와 Express 연동</h1>
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
           {message ? message : 'API에서 데이터를 가져오는 중...'}
         </p>
         <a
@@ -36,8 +37,14 @@ function App() {
           Learn React
         </a>
       </header>
+
+      {/* 네이버 로그인 버튼 섹션 */}
+      <section style={{ marginTop: "50px", textAlign: "center" }}>
+        <h2>네이버 로그인</h2>
+        <NaverLoginButton />
+      </section>
     </div>
   );
-}
+};
 
 export default App;

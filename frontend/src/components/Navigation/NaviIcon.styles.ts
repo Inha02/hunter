@@ -14,16 +14,24 @@ export const NaviIconWrapper = styled.div<WrapperProps>`
   height: 220px;
   background-color: ${(props) =>
     props.mode === "Clicked"
-      ? props.theme.colors.purple[100]
-      : props.theme.colors.white};
+      ? props.theme.colors.white // 선택된 상태에서 배경색 흰색
+      : props.mode === "Unclicked"
+      ? props.theme.colors.gray[400]
+      : props.theme.colors.purple[100]};
   border-radius: 16px;
-  border: ${(props) =>
-    props.mode === "Clicked" ? `2px solid ${props.theme.colors.primary}` : "none"};
+  border: none; // 테두리 제거
   cursor: pointer;
-  transition: background-color 0.3s ease, border 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+  /* y축 그림자만 설정 */
+  box-shadow: ${(props) =>
+    props.mode === "Clicked"
+      ? "0px 6px 6px rgba(0, 0, 0, 0.15)" // 클릭 상태: y축 그림자
+      : "0px 3px 3px rgba(0, 0, 0, 0.1)"}; // 기본 상태: y축 그림자
 
   &:hover {
     background-color: ${(props) => props.theme.colors.gray[100]};
+    box-shadow: ${(props) => "0px 4px 4px rgba(0, 0, 0, 0.1)"}; // 호버 시 y축 그림자
   }
 `;
 
@@ -40,7 +48,6 @@ export const NaviIconLabel = styled.div`
   justify-content: center;
   align-items: center;
   color: ${(props) => props.theme.colors.black};
-  font-family: Pretendard, sans-serif;
   font-size: ${(props) => props.theme.typography.T4.size};
   font-weight: ${(props) => props.theme.typography.T4.weight};
   line-height: ${(props) => props.theme.typography.T4.lineHeight};

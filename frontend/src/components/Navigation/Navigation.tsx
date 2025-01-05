@@ -8,6 +8,10 @@ const NavigationWrapper = styled.div`
   align-items: center;
   gap: 16px;
   padding: 16px;
+  max-width: 100%; /* 부모 요소 크기에 맞게 제한 */
+  overflow-x: auto; /* 넘칠 경우 스크롤 허용 */
+  flex-wrap: wrap; /* 너비를 초과하면 다음 줄로 넘어가도록 설정 */
+  box-sizing: border-box; /* 패딩 포함 크기 계산 */
 `;
 
 const iconList = [

@@ -10,8 +10,8 @@ export const NaviIconWrapper = styled.div<WrapperProps>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 168px;
-  height: 220px;
+  width: 144px;
+  height: 216px;
   background-color: ${(props) =>
     props.mode === "Clicked"
       ? props.theme.colors.white // 선택된 상태에서 배경색 흰색
@@ -37,8 +37,8 @@ export const NaviIconWrapper = styled.div<WrapperProps>`
 
 // NaviIcon 이미지
 export const NaviIconImage = styled.img`
-  width: 128px;
-  height: 128px;
+  width: 120px;
+  height: 120px;
   margin-bottom: 12px;
 `;
 

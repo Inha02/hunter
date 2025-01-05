@@ -2,12 +2,14 @@ import styled from "styled-components";
 
 // Header 컨테이너
 export const HeaderContainer = styled.header`
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0px 32px;
   background-color: ${(props) => props.theme.colors.white};
   border-bottom: 1px solid ${(props) => props.theme.colors.black};
+  box-sizing: border-box;
 `;
 
 // 로고와 네비게이션을 묶는 Wrapper

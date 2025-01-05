@@ -34,6 +34,9 @@ const theme: DefaultTheme = {
       500: "#DBD51F",
     },
   },
+  fonts: {
+    primary: "Pretendard, sans-serif",
+  },
   typography: {
     T1: { size: "60px", weight: 800, lineHeight: "72px" },
     T2: { size: "48px", weight: 700, lineHeight: "58px" },

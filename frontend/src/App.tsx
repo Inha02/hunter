@@ -11,6 +11,9 @@ import Toggle from "./components/Toggle/Toggle";
 import BotButton from "./components/BotButton/BotButton";
 import Pagination from "./components/Pagination/Pagination";
 import RadioGroup from "./components/RadioGroup/RadioGroup";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Callback from "./naverCallback";
+
 const App = () => {
   const deals: { id: string; price: string; date: string; conditionType: "best" | "good" | "average" | "bad" | "very_bad"; }[] = [
     { id: "1", price: "120,000", date: "2025.01.01", conditionType: "best" },
@@ -63,8 +66,12 @@ const App = () => {
 
 
   return (
-    <ThemeProvider theme={theme}>
-      <Header isLoggedIn={false} />
+    <><Router>
+      <Routes>
+        <Route path="/callback" element={<Callback />} />
+      </Routes>
+    </Router><ThemeProvider theme={theme}>
+        <Header isLoggedIn={false} />
         <Navigation />
         <SearchTab onSearch={handleSearchChange} />
         <Toggle />
@@ -72,28 +79,25 @@ const App = () => {
           onPreviousClick={handlePreviousClick}
           onSubmitClick={handleSubmitClick}
           previousLabel="이전"
-          submitLabel="게시글 등록"
-        />
+          submitLabel="게시글 등록" />
         <RadioGroup options={categories} onChange={handleCategoryChange} />
         <RadioGroup options={conditions} onChange={handleConditionChange} />
         <Pagination
           totalPages={8}
           currentPage={currentPage}
-          onPageChange={(page) => setCurrentPage(page)}
-        />     
+          onPageChange={(page) => setCurrentPage(page)} />
         <Merchandise
-        imageSrc="https://via.placeholder.com/320x240"
-        title="블랙스미스 말리 R1"
-        status="available"
-        condition="good"
-        price="120,000"
-        sellerName="김철수"
-        date="2025.01.01"
-        deals={deals}
-        />   
-      <Footer />
-      <Home />
-    </ThemeProvider>
+          imageSrc="https://via.placeholder.com/320x240"
+          title="블랙스미스 말리 R1"
+          status="available"
+          condition="good"
+          price="120,000"
+          sellerName="김철수"
+          date="2025.01.01"
+          deals={deals} />
+        <Footer />
+        <Home />
+      </ThemeProvider></>
   );
 };
 

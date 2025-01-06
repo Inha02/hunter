@@ -1,3 +1,4 @@
+// Merchandise.tsx
 import React from "react";
 import * as S from "./Merchandise.styles";
 import Status from "../../components/Block/Status";
@@ -33,7 +34,6 @@ const Merchandise: React.FC<MerchandiseProps> = ({
 }) => {
   return (
     <S.MerchandiseWrapper>
-      
       <S.ContentWrapper>
         {/* 왼쪽: 이미지 */}
         <S.ImageWrap>
@@ -42,7 +42,7 @@ const Merchandise: React.FC<MerchandiseProps> = ({
 
         {/* 중앙: 상세 정보 */}
         <S.DetailsWrapper>
-          <S.Title>{title}</S.Title>
+          <S.Title title={title}>{title}</S.Title> {/* title 속성 추가 */}
           <S.StatusConditionWrapper>
             <Status type={status} />
             <Condition type={condition} />

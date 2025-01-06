@@ -12,7 +12,7 @@ import {
 } from "./Header.styles";
 
 interface HeaderProps {
-  isLoggedIn: boolean;
+  isLoggedIn?: boolean;
   username?: string;
 }
 
@@ -42,7 +42,14 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, username }) => {
       {isLoggedIn ? (
         <UserSection>
           <UserName>{username} 님</UserName>
-          <AuthButton>Log Out</AuthButton>
+            <AuthButton
+            onClick={() => {
+              isLoggedIn = false;
+              window.location.href = "http://localhost:3000";
+            }}
+            >
+            Log Out
+            </AuthButton>
         </UserSection>
       ) : (
         <AuthSection>

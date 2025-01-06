@@ -1,7 +1,6 @@
-// Navigation.tsx
 import React from "react";
 import styled from "styled-components";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import NaviIcon from "./NaviIcon";
 
 const NavigationWrapper = styled.div`
@@ -9,7 +8,7 @@ const NavigationWrapper = styled.div`
   justify-content: center;
   align-items: center;
   gap: 16px;
-  padding: 16px;
+  padding: 16px 0;
   max-width: 100%;
   overflow-x: auto;
   flex-wrap: wrap;
@@ -17,39 +16,47 @@ const NavigationWrapper = styled.div`
 `;
 
 const iconList = [
-  { label: "모빌리티", icon: "/assets/icons/mobility.png", route: "/content/mobility" },
-  { label: "냉장고", icon: "/assets/icons/refrigerator.png", route: "/content/refrigerator" },
-  { label: "전자제품", icon: "/assets/icons/electronics.png", route: "/content/electronics" },
-  { label: "책/문서", icon: "/assets/icons/books.png", route: "/content/books" },
-  { label: "기프티콘", icon: "/assets/icons/gifticon.png", route: "/content/gifticon" },
-  { label: "원룸", icon: "/assets/icons/office.png", route: "/content/office" },
-  { label: "족보", icon: "/assets/icons/secret.png", route: "/content/secret" },
-  { label: "기타", icon: "/assets/icons/others.png", route: "/content/others" },
+  { label: "모빌리티", icon: "/assets/icons/mobility.png", route: "mobility" },
+  { label: "냉장고", icon: "/assets/icons/refrigerator.png", route: "refrigerator" },
+  { label: "전자제품", icon: "/assets/icons/electronics.png", route: "electronics" },
+  { label: "책/문서", icon: "/assets/icons/books.png", route: "books" },
+  { label: "기프티콘", icon: "/assets/icons/gifticon.png", route: "gifticon" },
+  { label: "원룸", icon: "/assets/icons/office.png", route: "office" },
+  { label: "족보", icon: "/assets/icons/secret.png", route: "secret" },
+  { label: "기타", icon: "/assets/icons/others.png", route: "others" },
 ];
 
-const Navigation: React.FC = () => {
+const Navigation: React.FC<{
+  clickedCategory: string | null;
+  onCategoryChange: (category: string | null) => void;
+}> = ({ clickedCategory, onCategoryChange }) => {
   const navigate = useNavigate();
-  const location = useLocation();
 
   return (
     <NavigationWrapper>
-      {iconList.map((item, index) => {
-        const isActive = location.pathname === item.route;
-        let mode: "Default" | "Clicked" | "Unclicked" = "Default";
-
-        if (isActive) {
-          mode = "Clicked";
-        } else if (location.pathname.startsWith("/content")) { // 다른 경로가 활성화된 경우
-          mode = "Unclicked";
-        }
+      {iconList.map((item) => {
+        const mode: "Default" | "Clicked" | "Unclicked" =
+          clickedCategory === item.route
+            ? "Clicked"
+            : clickedCategory
+            ? "Unclicked"
+            : "Default";
 
         return (
           <NaviIcon
-            key={index}
+            key={item.route}
             mode={mode}
             label={item.label}
             icon={item.icon}
-            onClick={() => navigate(item.route)}
+            onClick={() => {
+              if (clickedCategory === item.route) {
+                onCategoryChange(null);
+                navigate("/content/all");
+              } else {
+                onCategoryChange(item.route);
+                navigate(`/content/${item.route}`);
+              }
+            }}
           />
         );
       })}

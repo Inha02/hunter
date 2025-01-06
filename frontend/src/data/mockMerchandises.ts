@@ -68,7 +68,7 @@ const mockMerchandises: MerchandiseProps[] = [
     imageSrc: "/assets/icons/books.png",
     title: "데이터베이스 개론",
     status: "completed",
-    condition: "average",
+    condition: "very_bad",
     price: "25,000",
     sellerName: "홍길동",
     date: "2025.01.05",
@@ -78,8 +78,14 @@ const mockMerchandises: MerchandiseProps[] = [
         id: "3",
         price: "20,000",
         date: "2024.12.20",
-        conditionType: "average",
+        conditionType: "very_bad",
       },
+      {
+        id: "5",
+        price: "400,000",
+        date: "2024.12.15",
+        conditionType: "good",
+      }
     ],
   },
   {

@@ -7,8 +7,8 @@ export const SearchTabWrapper = styled.div`
   justify-content: space-between;
   padding: 0 16px;
   width: 100%;
-  max-width: 1600px;
-  height: 48px;
+  max-width: 1260px;
+  height: 60px;
   border: 1px solid ${({ theme }) => theme.colors.gray[300]};
   border-radius: 16px;
   background-color: ${({ theme }) => theme.colors.white};
@@ -19,9 +19,9 @@ export const Input = styled.input<{ isFilled: boolean }>`
   flex: 1;
   border: none;
   outline: none;
-  font-size: ${({ theme }) => theme.typography.T5.size};
-  font-weight: ${({ theme }) => theme.typography.T5.weight};
-  line-height: ${({ theme }) => theme.typography.T5.lineHeight};
+  font-size: ${({ theme }) => theme.typography.T4.size};
+  font-weight: ${({ theme }) => theme.typography.T4.weight};
+  line-height: ${({ theme }) => theme.typography.T4.lineHeight};
   color: ${({ isFilled, theme }) =>
     isFilled ? theme.colors.black : theme.colors.gray[300]};
   ::placeholder {

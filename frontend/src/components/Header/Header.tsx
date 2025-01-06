@@ -10,6 +10,7 @@ import {
   UserSection,
   UserName,
 } from "./Header.styles";
+import { useNavigate } from "react-router-dom";
 
 interface HeaderProps {
   isLoggedIn?: boolean;
@@ -22,9 +23,15 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, username }) => {
     window.location.href = "http://localhost:5001/auth/naver";
   };
 
+  const navigate = useNavigate();
+
   const handleHome = () => {
-    window.location.href = "http://localhost:3000";
+    navigate("/"); // Home 페이지로 이동
   }
+
+  const handleSellNavigation = () => {
+    navigate("/sell"); // Sell 페이지로 이동
+  };
 
   return (
     <HeaderContainer>
@@ -32,7 +39,7 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, username }) => {
       <LogoAndNav>
         <Logo onClick={handleHome}>HUN:ter</Logo>
         <Nav>
-          <NavItem>판매하기</NavItem>
+          <NavItem onClick={handleSellNavigation}>판매하기</NavItem>
           <NavItem>나의 거래</NavItem>
           <NavItem>채팅</NavItem>
         </Nav>

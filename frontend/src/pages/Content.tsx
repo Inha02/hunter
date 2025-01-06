@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Merchandise from "../components/Merchandise/Merchandise";
 import mockMerchandises from "../data/mockMerchandises"; // Import mock data
@@ -10,17 +10,26 @@ import Footer from "../components/Footer/Footer";
 import Header from "../components/Header/Header";
 import Navigation from "../components/Navigation/Navigation";
 
-const Content: React.FC = () => {
+const HomeContent: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { category } = useParams<{ category: string }>();
-  const [searchQuery, setSearchQuery] = useState<string>(""); // 검색어 상태 관리
+  const searchParams = new URLSearchParams(location.search);
+  const initialSearchQuery = searchParams.get("search") || "";
+
+  const [searchQuery, setSearchQuery] = useState<string>(initialSearchQuery); // 검색어 상태 관리
   const [showAvailableOnly, setShowAvailableOnly] = useState<boolean>(false); // 거래 가능 여부 상태 관리
   const [currentPage, setCurrentPage] = useState<number>(1); // 현재 페이지 상태 관리
   const [clickedCategory, setClickedCategory] = useState<string | null>(category || null); // Navigation 클릭 상태 관리
   const itemsPerPage = 10; // 페이지당 아이템 수
 
   // 검색 콜백 함수
-  const handleSearch = (query: string) => setSearchQuery(query);
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    if (query.trim().length > 0) {
+      navigate(`/content/all?search=${encodeURIComponent(query)}`); // 검색어와 함께 이동
+    }
+  };
 
   // 거래 가능 여부 토글 함수
   const handleToggle = () => setShowAvailableOnly(!showAvailableOnly);
@@ -58,8 +67,22 @@ const Content: React.FC = () => {
     <ContentWrapper>
       <Header />
 
-      {/* 검색 및 필터 섹션 */}
       <SharedContainer>
+        {/* Intro Section */}
+        {!category && (
+          <IntroSection>
+            <IntroText>
+              KAIST 4천 학우의 내 손안의 캠퍼스 마켓, <Highlight>HUN:ter!</Highlight>
+            </IntroText>
+            <SubText>학생들을 위한, 학생들에 의한, 가장 효율적인 거래 플랫폼!</SubText>
+            <ButtonWrapper>
+              <ActionButton color="green">판매하기</ActionButton>
+              <ActionButton color="blue">나의 거래</ActionButton>
+            </ButtonWrapper>
+          </IntroSection>
+        )}
+
+        {/* 검색 및 필터 섹션 */}
         <Navigation
           clickedCategory={clickedCategory}
           onCategoryChange={setClickedCategory}
@@ -104,7 +127,7 @@ const Content: React.FC = () => {
   );
 };
 
-export default Content;
+export default HomeContent;
 
 // Styled Components
 const ContentWrapper = styled.div`
@@ -164,4 +187,53 @@ const NoContentMessage = styled.div`
   color: ${({ theme }) => theme.colors.gray[600]};
   text-align: center;
   margin-top: 24px;
+`;
+
+const IntroSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 32px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 1200px;
+`;
+
+const IntroText = styled.h1`
+  font-size: ${({ theme }) => theme.typography.T2.size};
+  font-weight: ${({ theme }) => theme.typography.T2.weight};
+  color: ${({ theme }) => theme.colors.black};
+  margin-bottom: 8px;
+`;
+
+const Highlight = styled.span`
+  color: ${({ theme }) => theme.colors.primary};
+`;
+
+const SubText = styled.p`
+  font-size: ${({ theme }) => theme.typography.T4.size};
+  color: ${({ theme }) => theme.colors.black};
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+`;
+
+const ActionButton = styled.button<{ color: "green" | "blue" }>`
+  background-color: ${({ color, theme }) =>
+    color === "green" ? theme.colors.green[500] : theme.colors.blue[500]};
+  color: ${({ theme }) => theme.colors.white};
+  border: none;
+  border-radius: 8px;
+  padding: 16px 24px;
+  font-size: ${({ theme }) => theme.typography.T4.size};
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  &:hover {
+    background-color: ${({ color, theme }) =>
+      color === "green" ? theme.colors.green[500] : theme.colors.blue[500]};
+  }
 `;

@@ -115,6 +115,7 @@ const ContentWrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.gray[100]};
   width: 100%; /* 전체 너비를 차지 */
   min-width: 960px; /* 추가: 최소 너비 제한 */
+  min-height: 100vh;
 `;
 
 const SharedContainer = styled.div`

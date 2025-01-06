@@ -14,32 +14,35 @@ const Home: React.FC = () => {
 
   return (
     <HomeWrapper>
-      <Header />
+      <HeaderIntroWrapper>
+        <Header />
 
-      {/* Intro Section */}
-      <IntroSection>
-        <IntroText>
-          KAIST 4천 학우의 내 손안의 캠퍼스 마켓, <Highlight>HUN:ter!</Highlight>
-        </IntroText>
-        <SubText>
-          학생들을 위한, 학생들에 의한, 가장 효율적인 거래 플랫폼!
-        </SubText>
-        <ButtonWrapper>
-          <ActionButton color="green">판매하기</ActionButton>
-          <ActionButton color="blue">나의 거래</ActionButton>
-        </ButtonWrapper>
-      </IntroSection>
+        {/* Intro Section */}
+        <IntroSection>
+          <IntroText>
+            KAIST 4천 학우의 내 손안의 캠퍼스 마켓, <Highlight>HUN:ter!</Highlight>
+          </IntroText>
+          <SubText>
+            학생들을 위한, 학생들에 의한, 가장 효율적인 거래 플랫폼!
+          </SubText>
+          <ButtonWrapper>
+            <ActionButton color="green">판매하기</ActionButton>
+            <ActionButton color="blue">나의 거래</ActionButton>
+          </ButtonWrapper>
+        </IntroSection>
+      </HeaderIntroWrapper>
 
-      {/* Navigation */}
-      <Navigation
-        clickedCategory={clickedCategory}
-        onCategoryChange={handleCategoryChange}
-      />
-
-      {/* Search Tab */}
-      <SearchSection>
-        <SearchTab onSearch={() => {}} />
-      </SearchSection>
+      <SharedContainer>
+        {/* Navigation */}
+        <Navigation
+          clickedCategory={clickedCategory}
+          onCategoryChange={handleCategoryChange}
+        />
+        {/* Search Tab */}
+        <SearchSection>
+          <SearchTab onSearch={() => {}} />
+        </SearchSection>
+      </SharedContainer>
 
       <Footer />
     </HomeWrapper>
@@ -58,13 +61,20 @@ const HomeWrapper = styled.div`
   min-height: 100vh;
 `;
 
+const HeaderIntroWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: ${({ theme }) => theme.colors.purple[100]};
+  width: 100%;
+`;
+
 const IntroSection = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   padding: 32px;
-  background-color: ${({ theme }) => theme.colors.purple[100]};
   border-radius: 12px;
   width: 100%;
   max-width: 1200px;
@@ -118,7 +128,14 @@ const SearchSection = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 32px;
   width: 100%;
-  max-width: 1200px;
+`;
+
+const SharedContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* 화면 전체 너비 */
+  max-width: 1264px; /* 최대 너비를 지정 */
+  margin: 0 auto; /* 가운데 정렬 */
+  gap: 64px;
 `;

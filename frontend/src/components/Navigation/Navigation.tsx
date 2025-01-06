@@ -1,6 +1,7 @@
+// Navigation.tsx
 import React from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import NaviIcon from "./NaviIcon";
 
 const NavigationWrapper = styled.div`
@@ -28,18 +29,30 @@ const iconList = [
 
 const Navigation: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <NavigationWrapper>
-      {iconList.map((item, index) => (
-        <NaviIcon
-          key={index}
-          mode="Default"
-          label={item.label}
-          icon={item.icon}
-          onClick={() => navigate(item.route)} // 클릭 시 해당 경로로 이동
-        />
-      ))}
+      {iconList.map((item, index) => {
+        const isActive = location.pathname === item.route;
+        let mode: "Default" | "Clicked" | "Unclicked" = "Default";
+
+        if (isActive) {
+          mode = "Clicked";
+        } else if (location.pathname.startsWith("/content")) { // 다른 경로가 활성화된 경우
+          mode = "Unclicked";
+        }
+
+        return (
+          <NaviIcon
+            key={index}
+            mode={mode}
+            label={item.label}
+            icon={item.icon}
+            onClick={() => navigate(item.route)}
+          />
+        );
+      })}
     </NavigationWrapper>
   );
 };

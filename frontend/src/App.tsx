@@ -4,10 +4,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Content from "./pages/Content";
 import theme from "./styles/theme";
+import GlobalStyle from "./styles/GlobalStyle";
 
 const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
+      <GlobalStyle />
       <Router>
         <Routes>
           {/* 홈 페이지 */}

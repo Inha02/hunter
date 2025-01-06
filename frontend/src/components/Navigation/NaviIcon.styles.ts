@@ -11,7 +11,7 @@ export const NaviIconWrapper = styled.div<WrapperProps>`
   align-items: center;
   justify-content: center;
   width: 144px;
-  height: 216px;
+  height: 180px;
   background-color: ${(props) =>
     props.mode === "Clicked"
       ? props.theme.colors.white // 선택된 상태에서 배경색 흰색

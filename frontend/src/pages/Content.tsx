@@ -7,6 +7,8 @@ import SearchTab from "../components/SearchTab/SearchTab";
 import Toggle from "../components/Toggle/Toggle";
 import Pagination from "../components/Pagination/Pagination";
 import Footer from "../components/Footer/Footer";
+import Header from "../components/Header/Header";
+import Navigation from "../components/Navigation/Navigation";
 
 const Content: React.FC = () => {
   const { category } = useParams<{ category: string }>();
@@ -42,17 +44,18 @@ const Content: React.FC = () => {
 
   return (
     <ContentWrapper>
+      <Header isLoggedIn={true} />
+      <Navigation />
+
       {/* 검색 및 필터 섹션 */}
-      <FilterWrapper>
-        <SearchTab onSearch={handleSearch} />
-        <ToggleWrapper>
-          <Toggle
-            isOn={showAvailableOnly}
-            onToggle={handleToggle}
-          />
-          <ToggleLabel>거래 가능만 보기</ToggleLabel>
-        </ToggleWrapper>
-      </FilterWrapper>
+      <SearchTab onSearch={handleSearch} />
+      <ToggleWrapper>
+        <ToggleLabel>거래 가능만 보기</ToggleLabel>
+        <Toggle
+          isOn={showAvailableOnly}
+          onToggle={handleToggle}
+        />
+      </ToggleWrapper>
 
       {/* Merchandise 목록 */}
       {filteredMerchandises.length > 0 ? (
@@ -76,10 +79,7 @@ const Content: React.FC = () => {
         </PaginationWrapper>
       )}
 
-      {/* Footer */}
-      <FooterWrapper>
-        <Footer />
-      </FooterWrapper>
+      <Footer />
     </ContentWrapper>
   );
 };
@@ -92,17 +92,7 @@ const ContentWrapper = styled.div`
   align-items: center;
   gap: 32px;
   background-color: ${({ theme }) => theme.colors.gray[100]};
-  min-height: 100vh;
   width: 100%;
-  padding: 32px 16px;
-`;
-
-const FilterWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 80%;
-  margin-bottom: 16px;
 `;
 
 const ToggleWrapper = styled.div`
@@ -112,7 +102,7 @@ const ToggleWrapper = styled.div`
 `;
 
 const ToggleLabel = styled.span`
-  font-size: ${({ theme }) => theme.typography.T4.size};
+  font-size: ${({ theme }) => theme.typography.T5.size};
   color: ${({ theme }) => theme.colors.black};
 `;
 
@@ -127,10 +117,6 @@ const PaginationWrapper = styled.div`
   display: flex;
   justify-content: center;
   width: 80%;
-`;
-
-const FooterWrapper = styled.div`
-  width: 100%;
 `;
 
 const NoContentMessage = styled.div`

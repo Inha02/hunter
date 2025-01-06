@@ -6,6 +6,7 @@ import Content from "./pages/Content";
 import Item from "./pages/Item";
 import theme from "./styles/theme";
 import GlobalStyle from "./styles/GlobalStyle";
+import Sell from "./pages/Sell";
 
 const App: React.FC = () => {
   return (
@@ -19,6 +20,8 @@ const App: React.FC = () => {
           <Route path="/content/:category" element={<Content />} />
           {/* 아이템 상세 페이지 */}
           <Route path="/content/:category/:id" element={<Item />} />
+          {/* 판매하기 페이지 */}
+          <Route path="/sell" element={<Sell />} />
         </Routes>
       </Router>
     </ThemeProvider>

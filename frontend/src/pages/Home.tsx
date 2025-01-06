@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // useNavigate 임포트
 import styled from "styled-components";
 import Header from "../components/Header/Header";
 import Navigation from "../components/Navigation/Navigation";
@@ -6,10 +7,15 @@ import SearchTab from "../components/SearchTab/SearchTab";
 import Footer from "../components/Footer/Footer";
 
 const Home: React.FC = () => {
+  const navigate = useNavigate(); // useNavigate 선언
   const [clickedCategory, setClickedCategory] = useState<string | null>(null);
 
   const handleCategoryChange = (category: string | null) => {
     setClickedCategory(category);
+  };
+
+  const handleSellButtonClick = () => {
+    navigate("/sell"); // Sell 페이지로 이동
   };
 
   return (
@@ -26,7 +32,9 @@ const Home: React.FC = () => {
             학생들을 위한, 학생들에 의한, 가장 효율적인 거래 플랫폼!
           </SubText>
           <ButtonWrapper>
-            <ActionButton color="green">판매하기</ActionButton>
+            <ActionButton color="green" onClick={handleSellButtonClick}>
+              판매하기
+            </ActionButton>
             <ActionButton color="blue">나의 거래</ActionButton>
           </ButtonWrapper>
         </IntroSection>

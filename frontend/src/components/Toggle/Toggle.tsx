@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { ToggleWrapper, ToggleButton } from "./Toggle.styles";
 
-const Toggle = () => {
-  const [isOn, setIsOn] = useState(false);
+// Toggle 컴포넌트가 받을 props의 타입 정의
+interface ToggleProps {
+  isOn: boolean;
+  onToggle: () => void;
+}
 
+const Toggle: React.FC<ToggleProps> = ({ isOn, onToggle }) => {
   return (
-    <ToggleWrapper onClick={() => setIsOn(!isOn)}>
+    <ToggleWrapper onClick={onToggle}>
       <ToggleButton isOn={isOn}>{isOn ? "ON" : "OFF"}</ToggleButton>
     </ToggleWrapper>
   );

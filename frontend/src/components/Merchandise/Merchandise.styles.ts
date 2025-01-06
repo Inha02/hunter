@@ -5,11 +5,12 @@ export const MerchandiseWrapper = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 80%;
+  width: 100%;
   padding: 0 0 0 24px;
   background: ${({ theme }) => theme.colors.white};
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  gap: 24px;
 `;
 
 export const ContentWrapper = styled.div`
@@ -20,7 +21,7 @@ export const ContentWrapper = styled.div`
 `;
 
 export const ImageWrap = styled.div`
-  width: 320px;
+  width: 240px;
   height: 240px;
   align-items: center;
   background: ${({ theme }) => theme.colors.gray[200]};
@@ -53,8 +54,11 @@ export const Title = styled.h2`
   font-weight: ${({ theme }) => theme.typography.T2.weight};
   color: ${({ theme }) => theme.colors.black};
   line-height: 1;
-  margin: 0; /* margin 초기화 */
-  padding: 0; /* padding 초기화 */
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  text-overflow: ellipsis; /* 텍스트가 길 경우 생략 처리 */
+  white-space: nowrap; /* 텍스트를 한 줄로 고정 */
 `;
 
 export const Price = styled.p`

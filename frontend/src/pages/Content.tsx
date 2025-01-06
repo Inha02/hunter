@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Merchandise from "../components/Merchandise/Merchandise";
 import mockMerchandises from "../data/mockMerchandises"; // Import mock data
@@ -11,12 +11,13 @@ import Header from "../components/Header/Header";
 import Navigation from "../components/Navigation/Navigation";
 
 const Content: React.FC = () => {
+  const navigate = useNavigate();
   const { category } = useParams<{ category: string }>();
   const [searchQuery, setSearchQuery] = useState<string>(""); // 검색어 상태 관리
   const [showAvailableOnly, setShowAvailableOnly] = useState<boolean>(false); // 거래 가능 여부 상태 관리
   const [currentPage, setCurrentPage] = useState<number>(1); // 현재 페이지 상태 관리
   const [clickedCategory, setClickedCategory] = useState<string | null>(category || null); // Navigation 클릭 상태 관리
-  const itemsPerPage = 10; // 페이지당 아이템 수 (필요에 따라 조정)
+  const itemsPerPage = 10; // 페이지당 아이템 수
 
   // 검색 콜백 함수
   const handleSearch = (query: string) => setSearchQuery(query);
@@ -34,10 +35,10 @@ const Content: React.FC = () => {
 
   // 카테고리, 검색어, 거래 가능 여부에 따른 필터링
   const filteredMerchandises = mockMerchandises.filter((item) => {
-    const matchesCategory = clickedCategory === "all" || !clickedCategory || item.category === clickedCategory; // 모든 카테고리 포함 조건 추가
+    const matchesCategory =
+      clickedCategory === "all" || !clickedCategory || item.category === clickedCategory;
     const matchesQuery = searchQuery === "" || item.title.includes(searchQuery);
-    const matchesAvailability =
-      !showAvailableOnly || item.status === "available";
+    const matchesAvailability = !showAvailableOnly || item.status === "available";
     return matchesCategory && matchesQuery && matchesAvailability;
   });
 
@@ -47,6 +48,11 @@ const Content: React.FC = () => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
+  // Merchandise 클릭 시 이동 함수
+  const handleMerchandiseClick = (category: string, id: number) => {
+    navigate(`/content/${category}/${id}`);
+  };
 
   return (
     <ContentWrapper>
@@ -70,8 +76,12 @@ const Content: React.FC = () => {
       {/* Merchandise 목록 */}
       {filteredMerchandises.length > 0 ? (
         <MerchandiseList>
-          {paginatedMerchandises.map((item, index) => (
-            <Merchandise key={index} {...item} />
+          {paginatedMerchandises.map((item) => (
+            <Merchandise
+              key={item.id}
+              {...item}
+              onClick={() => handleMerchandiseClick(item.category, item.id)} // Add click handler
+            />
           ))}
         </MerchandiseList>
       ) : (
@@ -96,6 +106,7 @@ const Content: React.FC = () => {
 
 export default Content;
 
+// Styled Components
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;

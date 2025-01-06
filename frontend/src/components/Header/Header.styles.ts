@@ -26,6 +26,7 @@ export const Logo = styled.div`
   font-weight: ${(props) => props.theme.typography.T1.weight};
   color: ${(props) => props.theme.colors.primary};
   margin-right: 32px;
+  cursor: pointer;
 `;
 
 // 네비게이션 Wrapper

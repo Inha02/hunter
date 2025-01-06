@@ -22,11 +22,15 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, username }) => {
     window.location.href = "http://localhost:5001/auth/naver";
   };
 
+  const handleHome = () => {
+    window.location.href = "http://localhost:3000";
+  }
+
   return (
     <HeaderContainer>
       {/* 로고와 네비게이션 */}
       <LogoAndNav>
-        <Logo>HUN:ter</Logo>
+        <Logo onClick={handleHome}>HUN:ter</Logo>
         <Nav>
           <NavItem>판매하기</NavItem>
           <NavItem>나의 거래</NavItem>

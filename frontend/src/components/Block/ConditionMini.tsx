@@ -24,7 +24,7 @@ const MiniWrapper = styled.div<{ type: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100px;
+  width: 90px;
   padding: 4px 8px;
   border-radius: 8px;
   font-size: ${({ theme }) => theme.typography.T7.size};

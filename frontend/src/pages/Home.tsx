@@ -6,17 +6,15 @@ import SearchTab from "../components/SearchTab/SearchTab";
 import Footer from "../components/Footer/Footer";
 
 const Home: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [clickedCategory, setClickedCategory] = useState<string | null>(null);
 
-  // 검색 콜백 함수
-  const handleSearch = (value: string) => {
-    setSearchQuery(value); // 검색어를 상태로 저장
+  const handleCategoryChange = (category: string | null) => {
+    setClickedCategory(category);
   };
 
   return (
     <HomeWrapper>
-      {/* Header */}
-      <Header isLoggedIn={false} />
+      <Header />
 
       {/* Intro Section */}
       <IntroSection>
@@ -33,14 +31,16 @@ const Home: React.FC = () => {
       </IntroSection>
 
       {/* Navigation */}
-      <Navigation />
+      <Navigation
+        clickedCategory={clickedCategory}
+        onCategoryChange={handleCategoryChange}
+      />
 
       {/* Search Tab */}
       <SearchSection>
-        <SearchTab onSearch={handleSearch} />
+        <SearchTab onSearch={() => {}} />
       </SearchSection>
 
-      {/* Footer */}
       <Footer />
     </HomeWrapper>
   );

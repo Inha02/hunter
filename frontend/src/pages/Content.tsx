@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import Merchandise from "../components/Merchandise/Merchandise";
@@ -15,6 +15,7 @@ const Content: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>(""); // 검색어 상태 관리
   const [showAvailableOnly, setShowAvailableOnly] = useState<boolean>(false); // 거래 가능 여부 상태 관리
   const [currentPage, setCurrentPage] = useState<number>(1); // 현재 페이지 상태 관리
+  const [clickedCategory, setClickedCategory] = useState<string | null>(category || null); // Navigation 클릭 상태 관리
   const itemsPerPage = 10; // 페이지당 아이템 수 (필요에 따라 조정)
 
   // 검색 콜백 함수
@@ -23,12 +24,17 @@ const Content: React.FC = () => {
   // 거래 가능 여부 토글 함수
   const handleToggle = () => setShowAvailableOnly(!showAvailableOnly);
 
+  // category 또는 toggle 상태 변경 시 1페이지로 이동
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [clickedCategory, showAvailableOnly]);
+
   // 페이지 변경 핸들러
   const handlePageChange = (page: number) => setCurrentPage(page);
 
   // 카테고리, 검색어, 거래 가능 여부에 따른 필터링
   const filteredMerchandises = mockMerchandises.filter((item) => {
-    const matchesCategory = item.category === category;
+    const matchesCategory = clickedCategory === "all" || !clickedCategory || item.category === clickedCategory; // 모든 카테고리 포함 조건 추가
     const matchesQuery = searchQuery === "" || item.title.includes(searchQuery);
     const matchesAvailability =
       !showAvailableOnly || item.status === "available";
@@ -44,18 +50,22 @@ const Content: React.FC = () => {
 
   return (
     <ContentWrapper>
-      <Header isLoggedIn={true} />
-      <Navigation />
+      <Header />
 
       {/* 검색 및 필터 섹션 */}
-      <SearchTab onSearch={handleSearch} />
-      <ToggleWrapper>
-        <ToggleLabel>거래 가능만 보기</ToggleLabel>
-        <Toggle
-          isOn={showAvailableOnly}
-          onToggle={handleToggle}
+      <SharedContainer>
+        <Navigation
+          clickedCategory={clickedCategory}
+          onCategoryChange={setClickedCategory}
         />
-      </ToggleWrapper>
+        <SearchToggleWrapper>
+          <SearchTab onSearch={handleSearch} />
+          <ToggleWrapper>
+            <ToggleLabel>거래 가능만 보기</ToggleLabel>
+            <Toggle isOn={showAvailableOnly} onToggle={handleToggle} />
+          </ToggleWrapper>
+        </SearchToggleWrapper>
+      </SharedContainer>
 
       {/* Merchandise 목록 */}
       {filteredMerchandises.length > 0 ? (
@@ -69,7 +79,7 @@ const Content: React.FC = () => {
       )}
 
       {/* Pagination */}
-      {totalPages > 1 && (
+      {totalPages >= 1 && (
         <PaginationWrapper>
           <Pagination
             currentPage={currentPage}
@@ -90,15 +100,34 @@ const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
+  gap: 64px;
   background-color: ${({ theme }) => theme.colors.gray[100]};
-  width: 100%;
+  width: 100%; /* 전체 너비를 차지 */
+  min-width: 960px; /* 추가: 최소 너비 제한 */
+`;
+
+const SharedContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* 화면 전체 너비 */
+  max-width: 1264px; /* 최대 너비를 지정 */
+  margin: 0 auto; /* 가운데 정렬 */
+  gap: 64px;
+`;
+
+const SearchToggleWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px; /* 위아래 간격 */
+  width: 100%; /* SharedContainer의 너비를 상속받음 */
 `;
 
 const ToggleWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
+  margin-left: auto;
+  gap: 16px;
 `;
 
 const ToggleLabel = styled.span`
@@ -110,7 +139,6 @@ const MerchandiseList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
-  width: 80%;
 `;
 
 const PaginationWrapper = styled.div`

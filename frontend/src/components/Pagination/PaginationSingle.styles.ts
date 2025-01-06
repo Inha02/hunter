@@ -9,7 +9,7 @@ export const PaginationButton = styled.button<{ filled: boolean }>`
   border-radius: 8px;
   border: none;
   background-color: ${({ filled, theme }) =>
-    filled ? theme.colors.primary : theme.colors.white};
+    filled ? theme.colors.primary : 'transparent'};
   color: ${({ filled, theme }) =>
     filled ? theme.colors.white : theme.colors.black};
   cursor: pointer;

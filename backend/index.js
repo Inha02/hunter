@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 require("dotenv").config();
 const request = require("request");
+
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const axios = require("axios");
@@ -60,6 +61,7 @@ app.get("/auth/naver/callback", async (req, res) => {
         console.error(error);
         res.status(500).json({ error: "Failed to fetch user information." });
     }
+
 });
 
 // 서버 실행

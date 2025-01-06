@@ -1,10 +1,10 @@
 # 백엔드 시작하는 법
 
-cd backend -> yarn nodemon index
+cd backend -> yarn install -> yarn nodemon index
 
 # 프론트엔드 시작하는 법
 
-cd frontend -> yarn start
+cd frontend -> yarn install -> yarn start
 
 # Getting Started with Create React App
 

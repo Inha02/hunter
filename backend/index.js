@@ -30,20 +30,24 @@ mongoose
 app.get("/auth/naver", (req, res) => {
     const baseUrl = "https://nid.naver.com/oauth2.0/authorize";
     const clientId = process.env.NAVER_CLIENT_ID;
-    const redirectUri = encodeURIComponent(process.env.NAVER_CALLBACK_URL);
+    const redirectUri = process.env.NAVER_CALLBACK_URL;
     const state = Math.random().toString(36).substring(2);
 
+    console.log("Query parameters:", req.query);
     console.log("Redirect URI:", redirectUri); // 디버깅용
     console.log("Generated State:", state);
 
     const url = `${baseUrl}?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&state=${state}`;
     res.redirect(url);
+    console.log("Encoded Redirect URI:", encodeURIComponent(process.env.NAVER_CALLBACK_URL));
+
 });
 
 // 네이버 콜백 처리
 app.get("/auth/naver/callback", async (req, res) => {
     console.log("Callback route hit");
     const { code, state } = req.query;
+    console.log("Query parameters:", req.query);
     console.log("Code received:", code);
     console.log("State received:", state);
 

@@ -1,12 +1,12 @@
-// Merchandise.tsx
 import React from "react";
 import * as S from "./Merchandise.styles";
 import Status from "../../components/Block/Status";
 import Condition from "../../components/Block/Condition";
-import Deals from "../Deals/Deals"; // Deals 컴포넌트 임포트
+import Deals from "../Deals/Deals";
 
 export interface MerchandiseProps {
-  imageSrc: string;
+  id: number;
+  imageSrc: string[];
   title: string;
   status: "available" | "reserved" | "completed";
   condition: "best" | "good" | "average" | "bad" | "very_bad";
@@ -14,12 +14,14 @@ export interface MerchandiseProps {
   sellerName: string;
   date: string;
   category: string;
+  description: string;
   deals?: {
     id: string;
     price: string;
     date: string;
     conditionType: "best" | "good" | "average" | "bad" | "very_bad";
   }[];
+  onClick?: () => void;
 }
 
 const Merchandise: React.FC<MerchandiseProps> = ({
@@ -30,19 +32,28 @@ const Merchandise: React.FC<MerchandiseProps> = ({
   price,
   sellerName,
   date,
-  deals = [], // 기본값으로 빈 배열 설정
+  description,
+  deals = [],
+  onClick,
 }) => {
   return (
-    <S.MerchandiseWrapper>
+    <S.MerchandiseWrapper
+      onClick={onClick}
+      style={{ cursor: onClick ? "pointer" : "default" }}
+    >
       <S.ContentWrapper>
         {/* 왼쪽: 이미지 */}
         <S.ImageWrap>
-          <img src={imageSrc} alt={title} />
+          {imageSrc.length > 0 ? (
+            <img src={imageSrc[0]} alt={title} />
+          ) : (
+            <S.NoImage>No Image</S.NoImage>
+          )}
         </S.ImageWrap>
 
         {/* 중앙: 상세 정보 */}
         <S.DetailsWrapper>
-          <S.Title title={title}>{title}</S.Title> {/* title 속성 추가 */}
+          <S.Title title={title}>{title}</S.Title>
           <S.StatusConditionWrapper>
             <Status type={status} />
             <Condition type={condition} />

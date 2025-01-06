@@ -6,6 +6,7 @@ const request = require("request");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const axios = require("axios");
+const User = require("./models/User");
 
 dotenv.config();
 const app = express();
@@ -16,6 +17,14 @@ const PORT = 5001;
 app.use(cors());
 app.use(express.json()); // JSON 요청을 처리
 app.use(bodyParser.json());
+
+const mongoose = require("mongoose");
+
+// MongoDB 연결
+mongoose
+    .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log("MongoDB connected"))
+    .catch((err) => console.error("MongoDB connection error:", err));
 
 // 네이버 로그인 API 라우트
 app.get("/auth/naver", (req, res) => {
@@ -33,7 +42,10 @@ app.get("/auth/naver", (req, res) => {
 
 // 네이버 콜백 처리
 app.get("/auth/naver/callback", async (req, res) => {
+    console.log("Callback route hit");
     const { code, state } = req.query;
+    console.log("Code received:", code);
+    console.log("State received:", state);
 
     try {
         const tokenResponse = await axios.get("https://nid.naver.com/oauth2.0/token", {
@@ -46,6 +58,8 @@ app.get("/auth/naver/callback", async (req, res) => {
             },
         });
 
+        console.log("Token Response:", tokenResponse.data);
+
         const accessToken = tokenResponse.data.access_token;
 
         // 사용자 정보 가져오기
@@ -55,7 +69,28 @@ app.get("/auth/naver/callback", async (req, res) => {
             },
         });
 
-        res.json(userResponse.data);
+        console.log("User Response:", userResponse.data);
+
+        const userData = userResponse.data.response;
+
+        // MongoDB에 사용자 저장
+        let user = await User.findOne({ naverId: userData.id });
+
+        if (!user) {
+            user = new User({
+                naverId: userData.id,
+                name: userData.name,
+                email: userData.email,
+                profileImage: userData.profile_image,
+            });
+
+            await user.save();
+            console.log("User saved to MongoDB:", user);
+        } else {
+            console.log("User already exists in MongoDB:", user);
+        }
+
+        res.json(user);
 
     } catch (error) {
         console.error(error);

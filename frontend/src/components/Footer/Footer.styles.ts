@@ -10,6 +10,7 @@ export const FooterContainer = styled.footer`
   border-top: 2px solid ${(props) => props.theme.colors.gray[400]};
   padding: 0 32px;
   box-sizing: border-box;
+  margin-top: auto;
 `;
 
 // 로고 스타일

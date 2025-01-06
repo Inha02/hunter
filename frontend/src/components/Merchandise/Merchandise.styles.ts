@@ -64,7 +64,7 @@ export const NoImage = styled.div`
   color: ${({ theme }) => theme.colors.gray[600]};
   font-size: ${({ theme }) => theme.typography.T4.size};
   font-weight: ${({ theme }) => theme.typography.T4.weight};
-  background: ${({ theme }) => theme.colors.gray[100]};
+  background: ${({ theme }) => theme.colors.gray[200]};
   border-radius: 8px;
 `;
 

@@ -2,9 +2,9 @@ import React from "react";
 import * as S from "./Merchandise.styles";
 import Status from "../../components/Block/Status";
 import Condition from "../../components/Block/Condition";
-import Deals from "../Deals/Deals";
+import Deals from "../Deals/Deals"; // Deals 컴포넌트 임포트
 
-interface MerchandiseProps {
+export interface MerchandiseProps {
   imageSrc: string;
   title: string;
   status: "available" | "reserved" | "completed";
@@ -12,7 +12,8 @@ interface MerchandiseProps {
   price: string;
   sellerName: string;
   date: string;
-  deals: {
+  category: string;
+  deals?: {
     id: string;
     price: string;
     date: string;
@@ -28,17 +29,18 @@ const Merchandise: React.FC<MerchandiseProps> = ({
   price,
   sellerName,
   date,
-  deals,
+  deals = [], // 기본값으로 빈 배열 설정
 }) => {
   return (
     <S.MerchandiseWrapper>
+      
       <S.ContentWrapper>
-        {/* 왼쪽 섹션: 이미지 */}
+        {/* 왼쪽: 이미지 */}
         <S.ImageWrap>
           <img src={imageSrc} alt={title} />
         </S.ImageWrap>
 
-        {/* 중앙 섹션: 상세 정보 */}
+        {/* 중앙: 상세 정보 */}
         <S.DetailsWrapper>
           <S.Title>{title}</S.Title>
           <S.StatusConditionWrapper>
@@ -54,7 +56,7 @@ const Merchandise: React.FC<MerchandiseProps> = ({
         </S.DetailsWrapper>
       </S.ContentWrapper>
 
-      {/* 오른쪽 섹션: 최근 거래 */}
+      {/* 오른쪽: Deals */}
       <Deals mode="Search" deals={deals} />
     </S.MerchandiseWrapper>
   );

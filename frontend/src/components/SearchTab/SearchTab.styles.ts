@@ -6,8 +6,7 @@ export const SearchTabWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
-  margin: 0 auto;
-  width: calc(100% - 32px); /* 화면 크기 줄어듦에 대응 */
+  width: 100%;
   max-width: 1600px;
   height: 48px;
   border: 1px solid ${({ theme }) => theme.colors.gray[300]};

@@ -19,7 +19,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ isLoggedIn, username }) => {
   // 네이버 로그인 핸들러
   const handleNaverLogin = () => {
-    window.location.href = "http://localhost:5001/auth/naver"; // proxy 설정으로 /auth/naver -> 백엔드 리다이렉션
+    window.location.href = "http://localhost:5001/auth/naver";
   };
 
   return (

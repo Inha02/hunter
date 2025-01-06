@@ -22,63 +22,45 @@ interface DealsProps {
 }
 
 const Deals: React.FC<DealsProps> = ({ mode, deals }) => {
-  if (mode === "Search") {
-    const searchDeals = deals as SearchDeal[];
-    return (
-      <S.DealsWrapper mode={mode}>
-        <S.Title>최근 거래가</S.Title>
-        <S.DealList>
-          {searchDeals.map((deal) => (
-            <DealUnit
-              key={deal.id}
-              type="Merchandise"
-              price={deal.price}
-              date={deal.date}
-              conditionType={deal.conditionType}
-            />
-          ))}
-        </S.DealList>
-      </S.DealsWrapper>
-    );
-  } else if (mode === "Buy") {
-    const buyDeals = deals as ChatDeal[];
-    return (
-      <S.DealsWrapper mode={mode}>
-        <S.Title>최근 채팅</S.Title>
-        <S.DealList>
-          {buyDeals.map((deal) => (
-            <DealUnit
-              key={deal.id}
-              type="Chat"
-              user={deal.user}
-              answerTime={deal.answerTime}
-              answerType={deal.answerType}
-            />
-          ))}
-        </S.DealList>
-      </S.DealsWrapper>
-    );
-  } else if (mode === "Sell") {
-    const sellDeals = deals as ChatDeal[];
-    return (
-      <S.DealsWrapper mode={mode}>
-        <S.Title>최근 채팅</S.Title>
-        <S.DealList>
-          {sellDeals.map((deal) => (
-            <DealUnit
-              key={deal.id}
-              type="Chat"
-              user={deal.user}
-              answerTime={deal.answerTime}
-              answerType={deal.answerType}
-            />
-          ))}
-        </S.DealList>
-      </S.DealsWrapper>
-    );
-  }
+  const renderDeals = () => {
+    if (deals.length === 0) {
+      return <S.EmptyMessage>최근 거래내역이 없습니다.</S.EmptyMessage>;
+    }
 
-  return null;
+    if (mode === "Search") {
+      const searchDeals = deals as SearchDeal[];
+      return searchDeals.map((deal) => (
+        <DealUnit
+          key={deal.id}
+          type="Merchandise"
+          price={deal.price}
+          date={deal.date}
+          conditionType={deal.conditionType}
+        />
+      ));
+    }
+
+    const chatDeals = deals as ChatDeal[];
+    return chatDeals.map((deal) => (
+      <DealUnit
+        key={deal.id}
+        type="Chat"
+        user={deal.user}
+        answerTime={deal.answerTime}
+        answerType={deal.answerType}
+      />
+    ));
+  };
+
+  const title =
+    mode === "Search" ? "최근 거래가" : mode === "Buy" ? "최근 채팅" : "최근 채팅";
+
+  return (
+    <S.DealsWrapper mode={mode}>
+      <S.Title>{title}</S.Title>
+      <S.DealList>{renderDeals()}</S.DealList>
+    </S.DealsWrapper>
+  );
 };
 
 export default Deals;

@@ -37,8 +37,8 @@ export const NaviIconWrapper = styled.div<WrapperProps>`
 
 // NaviIcon 이미지
 export const NaviIconImage = styled.img`
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   margin-bottom: 12px;
 `;
 

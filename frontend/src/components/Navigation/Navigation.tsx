@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import NaviIcon from "./NaviIcon";
 
 const NavigationWrapper = styled.div`
@@ -8,41 +9,35 @@ const NavigationWrapper = styled.div`
   align-items: center;
   gap: 16px;
   padding: 16px;
-  max-width: 100%; /* 부모 요소 크기에 맞게 제한 */
-  overflow-x: auto; /* 넘칠 경우 스크롤 허용 */
-  flex-wrap: wrap; /* 너비를 초과하면 다음 줄로 넘어가도록 설정 */
-  box-sizing: border-box; /* 패딩 포함 크기 계산 */
+  max-width: 100%;
+  overflow-x: auto;
+  flex-wrap: wrap;
+  box-sizing: border-box;
 `;
 
 const iconList = [
-  { label: "모빌리티", icon: "/assets/icons/mobility.png" },
-  { label: "냉장고", icon: "/assets/icons/refrigerator.png" },
-  { label: "전자제품", icon: "/assets/icons/electronics.png" },
-  { label: "책/문서", icon: "/assets/icons/books.png" },
-  { label: "기프티콘", icon: "/assets/icons/gifticon.png" },
-  { label: "원룸", icon: "/assets/icons/office.png" },
-  { label: "족보", icon: "/assets/icons/secret.png" },
-  { label: "기타", icon: "/assets/icons/others.png" },
+  { label: "모빌리티", icon: "/assets/icons/mobility.png", route: "/content/mobility" },
+  { label: "냉장고", icon: "/assets/icons/refrigerator.png", route: "/content/refrigerator" },
+  { label: "전자제품", icon: "/assets/icons/electronics.png", route: "/content/electronics" },
+  { label: "책/문서", icon: "/assets/icons/books.png", route: "/content/books" },
+  { label: "기프티콘", icon: "/assets/icons/gifticon.png", route: "/content/gifticon" },
+  { label: "원룸", icon: "/assets/icons/office.png", route: "/content/office" },
+  { label: "족보", icon: "/assets/icons/secret.png", route: "/content/secret" },
+  { label: "기타", icon: "/assets/icons/others.png", route: "/content/others" },
 ];
 
 const Navigation: React.FC = () => {
-  const [selected, setSelected] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   return (
     <NavigationWrapper>
       {iconList.map((item, index) => (
         <NaviIcon
           key={index}
-          mode={
-            selected === null
-              ? "Default"
-              : selected === index
-              ? "Clicked"
-              : "Unclicked"
-          }
+          mode="Default"
           label={item.label}
           icon={item.icon}
-          onClick={() => setSelected(index)}
+          onClick={() => navigate(item.route)} // 클릭 시 해당 경로로 이동
         />
       ))}
     </NavigationWrapper>

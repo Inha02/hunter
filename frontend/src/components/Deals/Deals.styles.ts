@@ -1,6 +1,7 @@
+// src/components/Deals/Deals.styles.ts
 import styled from "styled-components";
 
-export const DealsWrapper = styled.div<{ mode: "Search" | "Buy" | "Sell" }>`
+export const DealsWrapper = styled.div<{ mode: "Search" | "Buy" | "Sell" | "ItemDetail" }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -12,7 +13,9 @@ export const DealsWrapper = styled.div<{ mode: "Search" | "Buy" | "Sell" }>`
       ? theme.colors.purple[100]
       : mode === "Buy"
       ? theme.colors.red[100]
-      : theme.colors.blue[100]};
+      : mode === "Sell" || mode === "ItemDetail"
+      ? theme.colors.blue[100]
+      : theme.colors.gray[100]}; /* Default color for safety */
   border-radius: 0px 16px 16px 0px;
 `;
 
@@ -34,14 +37,13 @@ export const DealList = styled.div`
 
 export const EmptyMessage = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   text-align: center;
-  width: 262px;
+  width: 240px; /* Adjusted as per user request */
   font-size: ${({ theme }) => theme.typography.T6.size};
   color: ${({ theme }) => theme.colors.gray[600]};
-  padding: 8px 16px; /* 기존 20px에서 축소 */
-  width: 240px; /* 기존 320px에서 축소 */
+  padding: 8px 16px;
   background-color: ${({ theme }) => theme.colors.white};
-  border-radius: 8px; /* 기존 12px에서 축소 */
-  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1); /* 살짝 축소 */
+  border-radius: 8px;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1);
 `;

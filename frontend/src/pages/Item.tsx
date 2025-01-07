@@ -1,30 +1,33 @@
+// src/pages/Item.tsx
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import BotButton from "../components/BotButton/BotButton";
-import mockMerchandises from "../data/mockMerchandises";
+import { useMerchandise } from "../context/MerchandiseContext";
 import Status from "../components/Block/Status";
 import Condition from "../components/Block/Condition";
+import { MerchandiseProps } from "../types"; // Import from types.ts
 
 const Item: React.FC = () => {
   const { category, id } = useParams<{ category: string; id: string }>();
   const navigate = useNavigate();
+  const { merchandises } = useMerchandise();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const item = mockMerchandises.find(
-    (merchandise) =>
-      merchandise.category === category && merchandise.id === Number(id)
+  // Find the merchandise by id and category using context
+  const item: MerchandiseProps | undefined = merchandises.find(
+    (merchandise) => merchandise.category === category && merchandise.id === id
   );
 
   if (!item) {
     return (
-      <div>
+      <ErrorWrapper>
         <Header />
-        <ErrorWrapper>Item not found.</ErrorWrapper>
+        <ErrorMessage>Item not found.</ErrorMessage>
         <Footer />
-      </div>
+      </ErrorWrapper>
     );
   }
 
@@ -185,12 +188,12 @@ const DetailWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin: 0 auto; /* 가운데 정렬 */
+  margin: 0 auto; /* Center alignment */
 
-  /* 기본 너비 */
+  /* Default width */
   width: 80%;
 
-  /* 화면 너비가 1200px 이상일 때 */
+  /* When screen width is 1200px or more */
   @media (min-width: 1200px) {
     width: 60%;
   }
@@ -229,5 +232,10 @@ const ErrorWrapper = styled.div`
   text-align: center;
   margin-top: 64px;
   font-size: ${({ theme }) => theme.typography.T3.size};
+  color: ${({ theme }) => theme.colors.red[500]};
+`;
+
+const ErrorMessage = styled.h1`
+  font-size: 2rem;
   color: ${({ theme }) => theme.colors.red[500]};
 `;

@@ -1,28 +1,10 @@
+// src/components/Merchandise/Merchandise.tsx
 import React from "react";
 import * as S from "./Merchandise.styles";
 import Status from "../../components/Block/Status";
 import Condition from "../../components/Block/Condition";
 import Deals from "../Deals/Deals";
-
-export interface MerchandiseProps {
-  id: number;
-  imageSrc: string[];
-  title: string;
-  status: "available" | "reserved" | "completed";
-  condition: "best" | "good" | "average" | "bad" | "very_bad";
-  price: string;
-  sellerName: string;
-  date: string;
-  category: string;
-  description: string;
-  deals?: {
-    id: string;
-    price: string;
-    date: string;
-    conditionType: "best" | "good" | "average" | "bad" | "very_bad";
-  }[];
-  onClick?: () => void;
-}
+import { MerchandiseProps } from "../../types"; // Import from types.ts
 
 const Merchandise: React.FC<MerchandiseProps> = ({
   imageSrc,

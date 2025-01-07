@@ -1,27 +1,28 @@
-import React, { createContext, useState, useContext } from "react";
+// src/context/MerchandiseContext.tsx
+import React, { createContext, useState, useContext, ReactNode, useEffect } from "react";
 import mockMerchandises from "../data/mockMerchandises";
-import { MerchandiseProps } from "../components/Merchandise/Merchandise";
+import { MerchandiseProps } from "../types"; // Import from types.ts
 
-// Context 타입 정의
-interface MerchandiseContextType {
+interface MerchandiseContextProps {
   merchandises: MerchandiseProps[];
   addMerchandise: (newMerchandise: MerchandiseProps) => void;
 }
 
-// Context 생성
-export const MerchandiseContext = createContext<MerchandiseContextType | undefined>(
-  undefined
-);
+const MerchandiseContext = createContext<MerchandiseContextProps | undefined>(undefined);
 
-// Provider 컴포넌트
-export const MerchandiseProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [merchandises, setMerchandises] = useState(mockMerchandises);
+export const MerchandiseProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [merchandises, setMerchandises] = useState<MerchandiseProps[]>(() => {
+    const storedMerchandises = localStorage.getItem("merchandises");
+    return storedMerchandises ? JSON.parse(storedMerchandises) : mockMerchandises;
+  });
 
   const addMerchandise = (newMerchandise: MerchandiseProps) => {
     setMerchandises((prev) => [newMerchandise, ...prev]);
   };
+
+  useEffect(() => {
+    localStorage.setItem("merchandises", JSON.stringify(merchandises));
+  }, [merchandises]);
 
   return (
     <MerchandiseContext.Provider value={{ merchandises, addMerchandise }}>
@@ -30,8 +31,7 @@ export const MerchandiseProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-// Hook으로 Context 사용
-export const useMerchandise = () => {
+export const useMerchandise = (): MerchandiseContextProps => {
   const context = useContext(MerchandiseContext);
   if (!context) {
     throw new Error("useMerchandise must be used within a MerchandiseProvider");

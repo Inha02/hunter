@@ -1,15 +1,15 @@
-// Content.tsx
+// src/pages/Content.tsx
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Merchandise from "../components/Merchandise/Merchandise";
-import mockMerchandises from "../data/mockMerchandises"; // Import mock data
 import SearchTab from "../components/SearchTab/SearchTab";
 import Toggle from "../components/Toggle/Toggle";
 import Pagination from "../components/Pagination/Pagination";
 import Footer from "../components/Footer/Footer";
 import Header from "../components/Header/Header";
 import Navigation from "../components/Navigation/Navigation";
+import { useMerchandise } from "../context/MerchandiseContext";
 
 const Content: React.FC = () => {
   const navigate = useNavigate();
@@ -17,6 +17,8 @@ const Content: React.FC = () => {
   const { category } = useParams<{ category: string }>();
   const searchParams = new URLSearchParams(location.search);
   const initialSearchQuery = searchParams.get("search") || "";
+
+  const { merchandises } = useMerchandise(); // Use merchandises from context
 
   const [searchQuery, setSearchQuery] = useState<string>(initialSearchQuery); // 검색어 상태 관리
   const [showAvailableOnly, setShowAvailableOnly] = useState<boolean>(false); // 거래 가능 여부 상태 관리
@@ -73,7 +75,7 @@ const Content: React.FC = () => {
   }, [searchQuery]);
 
   // 카테고리, 검색어, 거래 가능 여부에 따른 필터링
-  const filteredMerchandises = mockMerchandises.filter((item) => {
+  const filteredMerchandises = merchandises.filter((item) => {
     const matchesCategory =
       clickedCategory === "all" || !clickedCategory || item.category === clickedCategory;
     const matchesQuery = searchQuery === "" || item.title.toLowerCase().includes(searchQuery.toLowerCase());
@@ -89,7 +91,7 @@ const Content: React.FC = () => {
   );
 
   // Merchandise 클릭 시 이동 함수
-  const handleMerchandiseClick = (category: string, id: number) => {
+  const handleMerchandiseClick = (category: string, id: string) => { // Changed id type to string
     navigate(`/content/${category}/${id}`);
   };
 

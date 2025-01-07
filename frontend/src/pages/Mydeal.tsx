@@ -159,7 +159,7 @@ const MydealWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 64px;
+  gap: 32px;
   background-color: ${({ theme }) => theme.colors.gray[100]};
   width: 100%;
   min-height: 100vh;

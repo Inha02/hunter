@@ -110,7 +110,9 @@ const Sell: React.FC = () => {
 
   return (
     <SellWrapper>
-      <Header />
+      <HeaderToFormWrapper>
+        <Header />
+        <PageTitle>판매하기</PageTitle>
       <FormWrapper>
         {/* 제목 */}
         <Section>
@@ -174,6 +176,7 @@ const Sell: React.FC = () => {
           </ImageUploadWrapper>
         </Section>
       </FormWrapper>
+      </HeaderToFormWrapper>
 
       <BotButton
         onPreviousClick={() => window.history.back()}
@@ -197,6 +200,21 @@ const SellWrapper = styled.div`
   gap: 64px;
   min-height: 100vh;
   width: 100%;
+`;
+
+const HeaderToFormWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  width: 100%;
+`;
+
+const PageTitle = styled.h1`
+  font-size: ${({ theme }) => theme.typography.T1.size};
+  font-weight: ${({ theme }) => theme.typography.T1.weight};
+  color: ${({ theme }) => theme.colors.primary};
+  text-align: center;
 `;
 
 const FormWrapper = styled.div`

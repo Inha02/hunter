@@ -27,7 +27,7 @@ const SearchTab: React.FC<SearchTabProps> = ({ onSearch }) => {
     <SearchTabWrapper>
       <Input
         type="text"
-        placeholder="제목을 입력해주세요."
+        placeholder="상품명을 입력해주세요."
         value={value}
         onChange={handleChange}
         onKeyPress={handleKeyPress}

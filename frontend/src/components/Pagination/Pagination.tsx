@@ -12,6 +12,8 @@ const Pagination = ({ totalPages, currentPage, onPageChange }: PaginationProps) 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       onPageChange(page);
+      // 페이지가 변경되면 최상단으로 스크롤 이동
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 

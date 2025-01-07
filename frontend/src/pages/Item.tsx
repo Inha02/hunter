@@ -185,8 +185,15 @@ const DetailWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  width: 80%; /* 전체 폭의 80% */
   margin: 0 auto; /* 가운데 정렬 */
+
+  /* 기본 너비 */
+  width: 80%;
+
+  /* 화면 너비가 1200px 이상일 때 */
+  @media (min-width: 1200px) {
+    width: 60%;
+  }
 `;
 
 const Title = styled.h1`

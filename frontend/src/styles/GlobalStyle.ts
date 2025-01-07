@@ -9,9 +9,8 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    min-width: 1080px;
   }
-
-  /* 추가적인 글로벌 스타일을 여기에 작성할 수 있습니다 */
 `;
 
 export default GlobalStyle;

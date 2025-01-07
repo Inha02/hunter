@@ -18,17 +18,26 @@ interface ChatDeal {
 }
 
 interface DealsProps {
-  mode: "Search" | "Buy" | "Sell" | "ItemDetail"; // Include "ItemDetail"
+  mode: "Search" | "Buy" | "Sell" | "ItemDetail";
   deals: SearchDeal[] | ChatDeal[];
 }
 
 const Deals: React.FC<DealsProps> = ({ mode, deals }) => {
   const renderDeals = () => {
     if (deals.length === 0) {
-      return <S.EmptyMessage>최근 거래내역이 없습니다.</S.EmptyMessage>;
+      if (mode === "Search" || mode === "ItemDetail") {
+        return <S.EmptyMessage>최근 거래내역이 없습니다.</S.EmptyMessage>;
+      }
+      else if (mode === "Buy" ){
+        return <S.EmptyMessage>문의 완료하였습니다.</S.EmptyMessage>;
+      }
+      else{
+        return <S.EmptyMessage>최근 문의 내역이 없습니다.</S.EmptyMessage>
+      }
     }
 
-    if (mode === "Search" || mode === "ItemDetail") { // Handle "ItemDetail"
+    if (mode === "Search" || mode === "ItemDetail") {
+      // 최근 거래가
       const searchDeals = deals as SearchDeal[];
       return searchDeals.map((deal) => (
         <DealUnit
@@ -41,6 +50,7 @@ const Deals: React.FC<DealsProps> = ({ mode, deals }) => {
       ));
     }
 
+    // mode === "Buy" or "Sell" => 최근 채팅
     const chatDeals = deals as ChatDeal[];
     return chatDeals.map((deal) => (
       <DealUnit
@@ -57,8 +67,8 @@ const Deals: React.FC<DealsProps> = ({ mode, deals }) => {
     mode === "Search" || mode === "ItemDetail"
       ? "최근 거래가"
       : mode === "Buy"
-      ? "최근 채팅"
-      : "최근 채팅";
+      ? "최근 문의"
+      : "최근 문의";
 
   return (
     <S.DealsWrapper mode={mode}>

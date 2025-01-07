@@ -1,7 +1,9 @@
 // src/components/Deals/Deals.styles.ts
 import styled from "styled-components";
 
-export const DealsWrapper = styled.div<{ mode: "Search" | "Buy" | "Sell" | "ItemDetail" }>`
+export const DealsWrapper = styled.div<{
+  mode: "Search" | "Buy" | "Sell" | "ItemDetail";
+}>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,7 +17,7 @@ export const DealsWrapper = styled.div<{ mode: "Search" | "Buy" | "Sell" | "Item
       ? theme.colors.red[100]
       : mode === "Sell" || mode === "ItemDetail"
       ? theme.colors.blue[100]
-      : theme.colors.gray[100]}; /* Default color for safety */
+      : theme.colors.gray[100]};
   border-radius: 0px 16px 16px 0px;
 `;
 
@@ -39,7 +41,7 @@ export const EmptyMessage = styled.div`
   display: flex;
   justify-content: center;
   text-align: center;
-  width: 240px; /* Adjusted as per user request */
+  width: 240px;
   font-size: ${({ theme }) => theme.typography.T6.size};
   color: ${({ theme }) => theme.colors.gray[600]};
   padding: 8px 16px;

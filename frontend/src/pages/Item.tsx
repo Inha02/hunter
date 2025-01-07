@@ -8,7 +8,7 @@ import BotButton from "../components/BotButton/BotButton";
 import { useMerchandise } from "../context/MerchandiseContext";
 import Status from "../components/Block/Status";
 import Condition from "../components/Block/Condition";
-import { MerchandiseProps } from "../types"; // Import from types.ts
+import { MerchandiseProps } from "../types";
 
 const Item: React.FC = () => {
   const { category, id } = useParams<{ category: string; id: string }>();
@@ -16,7 +16,7 @@ const Item: React.FC = () => {
   const { merchandises } = useMerchandise();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Find the merchandise by id and category using context
+  // find the item
   const item: MerchandiseProps | undefined = merchandises.find(
     (merchandise) => merchandise.category === category && merchandise.id === id
   );
@@ -36,15 +36,17 @@ const Item: React.FC = () => {
   };
 
   const handleContactClick = () => {
+    // Show an alert or call addDeal if you want to record a buy
+    
     alert(`판매자 ${item.sellerName}님과 연락합니다.`);
   };
 
+  // Image slider
   const handleNextImage = () => {
     setCurrentImageIndex((prevIndex) =>
       prevIndex + 1 < item.imageSrc.length ? prevIndex + 1 : 0
     );
   };
-
   const handlePreviousImage = () => {
     setCurrentImageIndex((prevIndex) =>
       prevIndex - 1 >= 0 ? prevIndex - 1 : item.imageSrc.length - 1
@@ -64,7 +66,7 @@ const Item: React.FC = () => {
                   {"<"}
                 </ImageButton>
               )}
-              <img src={item.imageSrc[currentImageIndex]} alt={`${item.title}`} />
+              <img src={item.imageSrc[currentImageIndex]} alt={item.title} />
               {item.imageSrc.length > 1 && (
                 <ImageButton position="right" onClick={handleNextImage}>
                   {">"}
@@ -76,7 +78,7 @@ const Item: React.FC = () => {
           )}
         </ImageSlider>
 
-        {/* Details Section */}
+        {/* Details */}
         <DetailWrapperBackground>
           <DetailWrapper>
             <Title>{item.title}</Title>
@@ -98,7 +100,7 @@ const Item: React.FC = () => {
           onPreviousClick={handlePreviousClick}
           onSubmitClick={handleContactClick}
           previousLabel="이전"
-          submitLabel="연락하기"
+          submitLabel="문의하기"
         />
       </ContentWrapper>
       <Footer />
@@ -108,7 +110,7 @@ const Item: React.FC = () => {
 
 export default Item;
 
-// Styled Components
+// styled-components
 const ItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -188,12 +190,9 @@ const DetailWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin: 0 auto; /* Center alignment */
-
-  /* Default width */
+  margin: 0 auto;
   width: 80%;
 
-  /* When screen width is 1200px or more */
   @media (min-width: 1200px) {
     width: 60%;
   }

@@ -20,7 +20,7 @@ const Home: React.FC = () => {
   };
 
   const handleMyDealClick = () => {
-    navigate("/sell"); // My Deal 페이지로 이동 (예시)
+    navigate("/mydeal"); // My Deal 페이지로 이동 (예시)
   };
 
   // Updated onSearch handler

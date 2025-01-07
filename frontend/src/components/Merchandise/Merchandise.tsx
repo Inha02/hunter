@@ -4,9 +4,13 @@ import * as S from "./Merchandise.styles";
 import Status from "../../components/Block/Status";
 import Condition from "../../components/Block/Condition";
 import Deals from "../Deals/Deals";
-import { MerchandiseProps } from "../../types"; // Import from types.ts
+import { MerchandiseProps } from "../../types";
 
-const Merchandise: React.FC<MerchandiseProps> = ({
+interface ExtendedMerchandiseProps extends MerchandiseProps {
+  dealMode?: "Buy" | "Sell" | "Search" | "ItemDetail";
+}
+
+const Merchandise: React.FC<ExtendedMerchandiseProps> = ({
   imageSrc,
   title,
   status,
@@ -17,14 +21,18 @@ const Merchandise: React.FC<MerchandiseProps> = ({
   description,
   deals = [],
   onClick,
+  dealMode,
 }) => {
+  // Fallback to "Search" if no mode is provided
+  const finalMode = dealMode || "Search";
+
   return (
     <S.MerchandiseWrapper
       onClick={onClick}
       style={{ cursor: onClick ? "pointer" : "default" }}
     >
       <S.ContentWrapper>
-        {/* 왼쪽: 이미지 */}
+        {/* Left: Image */}
         <S.ImageWrap>
           {imageSrc.length > 0 ? (
             <img src={imageSrc[0]} alt={title} />
@@ -33,7 +41,7 @@ const Merchandise: React.FC<MerchandiseProps> = ({
           )}
         </S.ImageWrap>
 
-        {/* 중앙: 상세 정보 */}
+        {/* Center: Item Details */}
         <S.DetailsWrapper>
           <S.Title title={title}>{title}</S.Title>
           <S.StatusConditionWrapper>
@@ -49,8 +57,8 @@ const Merchandise: React.FC<MerchandiseProps> = ({
         </S.DetailsWrapper>
       </S.ContentWrapper>
 
-      {/* 오른쪽: Deals */}
-      <Deals mode="Search" deals={deals} />
+      {/* Right: Deals */}
+      <Deals mode={finalMode} deals={deals} />
     </S.MerchandiseWrapper>
   );
 };

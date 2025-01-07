@@ -7,6 +7,7 @@ declare module "styled-components" {
       white: string;
       black: string;
       naver: string;
+      kakao: string;
       green: { [key: number]: string };
       blue: { [key: number]: string };
       purple: { [key: number]: string };

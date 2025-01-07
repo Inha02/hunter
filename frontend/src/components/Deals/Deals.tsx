@@ -1,3 +1,4 @@
+// src/components/Deals/Deals.tsx
 import React from "react";
 import * as S from "./Deals.styles";
 import DealUnit from "../../components/DealUnit/DealUnit";
@@ -17,7 +18,7 @@ interface ChatDeal {
 }
 
 interface DealsProps {
-  mode: "Search" | "Buy" | "Sell";
+  mode: "Search" | "Buy" | "Sell" | "ItemDetail"; // Include "ItemDetail"
   deals: SearchDeal[] | ChatDeal[];
 }
 
@@ -27,7 +28,7 @@ const Deals: React.FC<DealsProps> = ({ mode, deals }) => {
       return <S.EmptyMessage>최근 거래내역이 없습니다.</S.EmptyMessage>;
     }
 
-    if (mode === "Search") {
+    if (mode === "Search" || mode === "ItemDetail") { // Handle "ItemDetail"
       const searchDeals = deals as SearchDeal[];
       return searchDeals.map((deal) => (
         <DealUnit
@@ -53,7 +54,11 @@ const Deals: React.FC<DealsProps> = ({ mode, deals }) => {
   };
 
   const title =
-    mode === "Search" ? "최근 거래가" : mode === "Buy" ? "최근 채팅" : "최근 채팅";
+    mode === "Search" || mode === "ItemDetail"
+      ? "최근 거래가"
+      : mode === "Buy"
+      ? "최근 채팅"
+      : "최근 채팅";
 
   return (
     <S.DealsWrapper mode={mode}>

@@ -1,4 +1,6 @@
-import { MerchandiseProps } from "../components/Merchandise/Merchandise";
+// src/data/mockMerchandises.ts
+import { MerchandiseProps } from "../types"; // Import from types.ts
+import { v4 as uuidv4 } from "uuid"; // Import UUID generator
 
 const categories = [
   { name: "mobility", image: "/assets/icons/mobility.png" },
@@ -31,55 +33,55 @@ const randomDate = () => {
 const randomDeals = () => {
   const dealCount = Math.floor(Math.random() * 4); // 0~3개 생성
   return Array.from({ length: dealCount }, (_, index) => ({
-    id: `${index + 1}`,
+    id: uuidv4(),
     price: randomPrice().toString(),
     date: randomDate(),
-    conditionType: conditions[
-      Math.floor(Math.random() * conditions.length)
-    ] as "best" | "good" | "average" | "bad" | "very_bad", // 타입 단언
+    conditionType: conditions[Math.floor(Math.random() * conditions.length)] as
+      | "best"
+      | "good"
+      | "average"
+      | "bad"
+      | "very_bad",
   }));
 };
 
-const mockMerchandises: MerchandiseProps[] = Array.from(
-  { length: 100 },
-  (_, index) => {
-    const category = categories[index % categories.length];
-    const images = [category.image];
-    while (images.length < 3) {
-      const randomImage =
-        categories[Math.floor(Math.random() * categories.length)].image;
-      if (!images.includes(randomImage)) images.push(randomImage);
-    }
-
-    return {
-      id: index + 1,
-      imageSrc: images,
-      title: `${category.name} 상품 ${index + 1}`,
-      status: statuses[Math.floor(Math.random() * statuses.length)] as
-        | "available"
-        | "reserved"
-        | "completed",
-      condition: conditions[Math.floor(Math.random() * conditions.length)] as
-        | "best"
-        | "good"
-        | "average"
-        | "bad"
-        | "very_bad",
-      price: randomPrice().toString(),
-      sellerName: sellers[Math.floor(Math.random() * sellers.length)],
-      date: randomDate(),
-      category: category.name as
-        | "mobility"
-        | "refrigerator"
-        | "electronics"
-        | "books"
-        | "gifticon"
-        | "office"
-        | "others",
-      description: descriptions[Math.floor(Math.random() * descriptions.length)],
-      deals: randomDeals(),
-    };
+const mockMerchandises: MerchandiseProps[] = Array.from({ length: 100 }, (_, index) => {
+  const category = categories[index % categories.length];
+  const images = [category.image];
+  while (images.length < 3) {
+    const randomImage =
+      categories[Math.floor(Math.random() * categories.length)].image;
+    if (!images.includes(randomImage)) images.push(randomImage);
   }
-);
+
+  return {
+    id: uuidv4(), // Use UUID for unique ID
+    imageSrc: images,
+    title: `${category.name} 상품 ${index + 1}`,
+    status: statuses[Math.floor(Math.random() * statuses.length)] as
+      | "available"
+      | "reserved"
+      | "completed",
+    condition: conditions[Math.floor(Math.random() * conditions.length)] as
+      | "best"
+      | "good"
+      | "average"
+      | "bad"
+      | "very_bad",
+    price: randomPrice().toString(),
+    sellerName: sellers[Math.floor(Math.random() * sellers.length)],
+    date: randomDate(),
+    category: category.name as
+      | "mobility"
+      | "refrigerator"
+      | "electronics"
+      | "books"
+      | "gifticon"
+      | "office"
+      | "others",
+    description: descriptions[Math.floor(Math.random() * descriptions.length)],
+    deals: randomDeals(),
+  };
+});
 
 export default mockMerchandises;

@@ -1,11 +1,14 @@
+// src/pages/Sell.tsx
 import React, { useState } from "react";
 import styled from "styled-components";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import RadioGroup from "../components/RadioGroup/RadioGroup";
 import BotButton from "../components/BotButton/BotButton";
-import initialMockMerchandises from "../data/mockMerchandises"; // 초기 데이터 가져오기
+import { useMerchandise } from "../context/MerchandiseContext"; // Import useMerchandise
 import { useNavigate } from "react-router-dom";
+import { MerchandiseProps } from "../types"; // Import from types.ts
+import { v4 as uuidv4 } from "uuid"; // Import UUID generator
 
 const categories = ["모빌리티", "냉장고", "전자제품", "책/문서", "기프티콘", "원룸/오피스텔", "기타"];
 const conditions = ["미개봉 / 최상", "상태 좋음", "양호 / 보통", "상태 별로", "부품용 / 고장"];
@@ -17,8 +20,8 @@ const Sell: React.FC = () => {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [images, setImages] = useState<string[]>([]);
-  const [merchandises, setMerchandises] = useState(initialMockMerchandises); // 상태로 관리
 
+  const { addMerchandise } = useMerchandise(); // Use context
   const navigate = useNavigate();
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,26 +38,27 @@ const Sell: React.FC = () => {
       return;
     }
 
-    const newPost = {
-      id: merchandises.length + 1,
+    const newPost: MerchandiseProps = {
+      id: uuidv4(), // Use UUID for unique ID
       imageSrc: images,
       title,
-      status: "available" as "available" | "reserved" | "completed",
+      status: "available",
       condition: convertConditionToType(condition),
       price,
       sellerName: "현재 사용자",
       date: new Date().toISOString().split("T")[0],
       category: convertCategoryToType(category),
       description,
+      deals: [], // Initialize with empty deals or customize as needed
     };
 
-    setMerchandises((prev) => [newPost, ...prev]); // 상태 업데이트
+    addMerchandise(newPost); // Add to context
     alert("게시글이 등록되었습니다!");
     navigate("/content/all"); // 게시글 목록으로 이동
   };
 
-  const convertConditionToType = (condition: string | null) => {
-    const conditionMap: Record<string, "best" | "good" | "average" | "bad" | "very_bad"> = {
+  const convertConditionToType = (condition: string | null): MerchandiseProps["condition"] => {
+    const conditionMap: Record<string, MerchandiseProps["condition"]> = {
       "미개봉 / 최상": "best",
       "상태 좋음": "good",
       "양호 / 보통": "average",
@@ -64,11 +68,8 @@ const Sell: React.FC = () => {
     return conditionMap[condition || "양호 / 보통"];
   };
 
-  const convertCategoryToType = (category: string | null) => {
-    const categoryMap: Record<
-      string,
-      "mobility" | "refrigerator" | "electronics" | "books" | "gifticon" | "office" | "others"
-    > = {
+  const convertCategoryToType = (category: string | null): MerchandiseProps["category"] => {
+    const categoryMap: Record<string, MerchandiseProps["category"]> = {
       "모빌리티": "mobility",
       "냉장고": "refrigerator",
       "전자제품": "electronics",
@@ -77,7 +78,7 @@ const Sell: React.FC = () => {
       "원룸/오피스텔": "office",
       "기타": "others",
     };
-    return categoryMap[category || "기타"];
+    return categoryMap[category || "others"];
   };
 
   return (
@@ -160,7 +161,7 @@ const Sell: React.FC = () => {
 
 export default Sell;
 
-// Styled Components
+// Styled Components (unchanged)
 const SellWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -182,7 +183,7 @@ const FormWrapper = styled.div`
 const Section = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: stretch; /* Ensures purple box matches the height of the content */
+  align-items: stretch; /* Ensures label matches the height of the content */
   width: 100%;
   background-color: ${({ theme }) => theme.colors.white}; /* White background for all sections */
   border-radius: 16px;

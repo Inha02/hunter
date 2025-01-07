@@ -1,3 +1,4 @@
+// SearchTab.tsx
 import React, { useState } from "react";
 import { SearchTabWrapper, Input, SearchIcon } from "./SearchTab.styles";
 
@@ -9,21 +10,30 @@ const SearchTab: React.FC<SearchTabProps> = ({ onSearch }) => {
   const [value, setValue] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setValue(newValue);
-    onSearch(newValue); // 부모로 검색 값을 전달
+    setValue(e.target.value);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      onSearch(value.trim());
+    }
+  };
+
+  const handleSearchClick = () => {
+    onSearch(value.trim());
   };
 
   return (
     <SearchTabWrapper>
       <Input
         type="text"
-        placeholder="제목을 입력해주세요."
+        placeholder="상품명을 입력해주세요."
         value={value}
         onChange={handleChange}
+        onKeyPress={handleKeyPress}
         isFilled={value.length > 0}
       />
-      <SearchIcon />
+      <SearchIcon onClick={handleSearchClick} style={{ cursor: "pointer" }} />
     </SearchTabWrapper>
   );
 };

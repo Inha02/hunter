@@ -1,30 +1,33 @@
+// src/pages/Item.tsx
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import BotButton from "../components/BotButton/BotButton";
-import mockMerchandises from "../data/mockMerchandises";
+import { useMerchandise } from "../context/MerchandiseContext";
 import Status from "../components/Block/Status";
 import Condition from "../components/Block/Condition";
+import { MerchandiseProps } from "../types";
 
 const Item: React.FC = () => {
   const { category, id } = useParams<{ category: string; id: string }>();
   const navigate = useNavigate();
+  const { merchandises } = useMerchandise();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const item = mockMerchandises.find(
-    (merchandise) =>
-      merchandise.category === category && merchandise.id === Number(id)
+  // find the item
+  const item: MerchandiseProps | undefined = merchandises.find(
+    (merchandise) => merchandise.category === category && merchandise.id === id
   );
 
   if (!item) {
     return (
-      <div>
+      <ErrorWrapper>
         <Header />
-        <ErrorWrapper>Item not found.</ErrorWrapper>
+        <ErrorMessage>Item not found.</ErrorMessage>
         <Footer />
-      </div>
+      </ErrorWrapper>
     );
   }
 
@@ -33,15 +36,17 @@ const Item: React.FC = () => {
   };
 
   const handleContactClick = () => {
+    // Show an alert or call addDeal if you want to record a buy
+    
     alert(`판매자 ${item.sellerName}님과 연락합니다.`);
   };
 
+  // Image slider
   const handleNextImage = () => {
     setCurrentImageIndex((prevIndex) =>
       prevIndex + 1 < item.imageSrc.length ? prevIndex + 1 : 0
     );
   };
-
   const handlePreviousImage = () => {
     setCurrentImageIndex((prevIndex) =>
       prevIndex - 1 >= 0 ? prevIndex - 1 : item.imageSrc.length - 1
@@ -61,7 +66,7 @@ const Item: React.FC = () => {
                   {"<"}
                 </ImageButton>
               )}
-              <img src={item.imageSrc[currentImageIndex]} alt={`${item.title}`} />
+              <img src={item.imageSrc[currentImageIndex]} alt={item.title} />
               {item.imageSrc.length > 1 && (
                 <ImageButton position="right" onClick={handleNextImage}>
                   {">"}
@@ -73,7 +78,7 @@ const Item: React.FC = () => {
           )}
         </ImageSlider>
 
-        {/* Details Section */}
+        {/* Details */}
         <DetailWrapperBackground>
           <DetailWrapper>
             <Title>{item.title}</Title>
@@ -95,7 +100,7 @@ const Item: React.FC = () => {
           onPreviousClick={handlePreviousClick}
           onSubmitClick={handleContactClick}
           previousLabel="이전"
-          submitLabel="연락하기"
+          submitLabel="문의하기"
         />
       </ContentWrapper>
       <Footer />
@@ -105,7 +110,7 @@ const Item: React.FC = () => {
 
 export default Item;
 
-// Styled Components
+// styled-components
 const ItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -185,8 +190,12 @@ const DetailWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  width: 80%; /* 전체 폭의 80% */
-  margin: 0 auto; /* 가운데 정렬 */
+  margin: 0 auto;
+  width: 80%;
+
+  @media (min-width: 1200px) {
+    width: 60%;
+  }
 `;
 
 const Title = styled.h1`
@@ -222,5 +231,10 @@ const ErrorWrapper = styled.div`
   text-align: center;
   margin-top: 64px;
   font-size: ${({ theme }) => theme.typography.T3.size};
+  color: ${({ theme }) => theme.colors.red[500]};
+`;
+
+const ErrorMessage = styled.h1`
+  font-size: 2rem;
   color: ${({ theme }) => theme.colors.red[500]};
 `;

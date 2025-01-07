@@ -14,18 +14,13 @@ export const MerchandiseWrapper = styled.div`
   flex-wrap: nowrap;
 
   max-width: 1230px;
-  min-width: 960px;
 
   @media (min-width: 1400px) {
     width: 1230px;
   }
 
-  @media (max-width: 1399px) {
-    width: calc(100% - 80px);
-  }
-
-  @media (max-width: 960px) {
-    width: 960px;
+  @media (max-width: 1400px) {
+    width: 80%;
   }
 `;
 

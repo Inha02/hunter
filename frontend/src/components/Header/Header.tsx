@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, createContext, useContext } from "react";
 import {
   HeaderContainer,
   LogoAndNav,
@@ -12,10 +12,18 @@ import {
 } from "./Header.styles";
 import { useNavigate } from "react-router-dom";
 
-interface HeaderProps {
-  isLoggedIn?: boolean;
+// 로그인 상태 관리를 위한 Context 생성
+const AuthContext = createContext<{
+  isLoggedIn: boolean;
   username?: string;
-}
+  login: (username: string) => void;
+  logout: () => void;
+}>({
+  isLoggedIn: false,
+  login: () => {},
+  logout: () => {},
+});
+
 
 const Header: React.FC<HeaderProps> = ({ isLoggedIn, username }) => {
   // 네이버 로그인 핸들러
@@ -28,15 +36,27 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, username }) => {
   }
 
 
+export const useAuth = () => useContext(AuthContext);
 
+
+const Header: React.FC = () => {
+  const { isLoggedIn, username, login, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleHome = () => {
     navigate("/"); // Home 페이지로 이동
-  }
+  };
 
   const handleSellNavigation = () => {
     navigate("/sell"); // Sell 페이지로 이동
+  };
+
+  const handleContentNavigation = () => {
+    navigate("/content/all"); // Content 페이지로 이동
+  };
+
+  const handleMyDealClick = () => {
+    navigate("/mydeal"); // My Deal 페이지로 이동
   };
 
   return (
@@ -45,9 +65,9 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, username }) => {
       <LogoAndNav>
         <Logo onClick={handleHome}>HUN:ter</Logo>
         <Nav>
+          <NavItem onClick={handleContentNavigation}>둘러보기</NavItem>
           <NavItem onClick={handleSellNavigation}>판매하기</NavItem>
-          <NavItem>나의 거래</NavItem>
-          <NavItem>채팅</NavItem>
+          <NavItem onClick={handleMyDealClick}>나의 거래</NavItem>
         </Nav>
       </LogoAndNav>
 
@@ -55,6 +75,7 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, username }) => {
       {isLoggedIn ? (
         <UserSection>
           <UserName>{username} 님</UserName>
+
           <AuthButton
             onClick={() => {
               isLoggedIn = false;
@@ -63,18 +84,46 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, username }) => {
           >
             Log Out
           </AuthButton>
+
+          //<AuthButton onClick={logout}>Log Out</AuthButton>
+
         </UserSection>
       ) : (
         <AuthSection>
           <AuthButton>
             <span>N</span> Sign Up
           </AuthButton>
+
           <AuthButton onClick={loginWithKakao}>
+
+          //<AuthButton onClick={() => login("currentUser")}>
+
             <span>N</span> Login
           </AuthButton>
         </AuthSection>
       )}
     </HeaderContainer>
+  );
+};
+
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState<string | undefined>();
+
+  const login = (username: string) => {
+    setIsLoggedIn(true);
+    setUsername(username);
+  };
+
+  const logout = () => {
+    setIsLoggedIn(false);
+    setUsername(undefined);
+  };
+
+  return (
+    <AuthContext.Provider value={{ isLoggedIn, username, login, logout }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 

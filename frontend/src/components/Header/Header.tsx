@@ -33,15 +33,19 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, username }) => {
     navigate("/sell"); // Sell 페이지로 이동
   };
 
+  const handleContentNavigation = () => {
+    navigate("/content/all"); // Content 페이지로 이동
+  }
+
   return (
     <HeaderContainer>
       {/* 로고와 네비게이션 */}
       <LogoAndNav>
         <Logo onClick={handleHome}>HUN:ter</Logo>
         <Nav>
+          <NavItem onClick={handleContentNavigation}>둘러보기</NavItem>
           <NavItem onClick={handleSellNavigation}>판매하기</NavItem>
           <NavItem>나의 거래</NavItem>
-          <NavItem>채팅</NavItem>
         </Nav>
       </LogoAndNav>
 

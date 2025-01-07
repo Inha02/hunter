@@ -1,3 +1,4 @@
+// Home.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // useNavigate 임포트
 import styled from "styled-components";
@@ -18,6 +19,17 @@ const Home: React.FC = () => {
     navigate("/sell"); // Sell 페이지로 이동
   };
 
+  const handleMyDealClick = () => {
+    navigate("/sell"); // My Deal 페이지로 이동 (예시)
+  };
+
+  // Updated onSearch handler
+  const handleSearch = (searchTerm: string) => {
+    if (searchTerm) {
+      navigate(`/content/all?search=${encodeURIComponent(searchTerm)}`);
+    }
+  };
+
   return (
     <HomeWrapper>
       <HeaderIntroWrapper>
@@ -25,17 +37,23 @@ const Home: React.FC = () => {
 
         {/* Intro Section */}
         <IntroSection>
-          <IntroText>
-            KAIST 4천 학우의 내 손안의 캠퍼스 마켓, <Highlight>HUN:ter!</Highlight>
-          </IntroText>
-          <SubText>
-            학생들을 위한, 학생들에 의한, 가장 효율적인 거래 플랫폼!
-          </SubText>
+          <TextWrapper>
+            <IntroText>
+              KAIST 4천 학우의 내 손안의 캠퍼스 마켓, <Highlight>HUN:ter!</Highlight>
+            </IntroText>
+            <SubText>
+              학생들을 위한, 학생들에 의한, 가장 효율적인 거래 플랫폼!
+            </SubText>
+          </TextWrapper>
           <ButtonWrapper>
             <ActionButton color="green" onClick={handleSellButtonClick}>
+              <ActionIcon src="/assets/icons/sell.png" alt="Sell Icon" />
               판매하기
             </ActionButton>
-            <ActionButton color="blue">나의 거래</ActionButton>
+            <ActionButton color="blue" onClick={handleMyDealClick}>
+              <ActionIcon src="/assets/icons/my-deal.png" alt="My Deal Icon" />
+              나의 거래
+            </ActionButton>
           </ButtonWrapper>
         </IntroSection>
       </HeaderIntroWrapper>
@@ -48,7 +66,7 @@ const Home: React.FC = () => {
         />
         {/* Search Tab */}
         <SearchSection>
-          <SearchTab onSearch={() => {}} />
+          <SearchTab onSearch={handleSearch} />
         </SearchSection>
       </SharedContainer>
 
@@ -59,7 +77,7 @@ const Home: React.FC = () => {
 
 export default Home;
 
-// Styled Components
+// Styled Components (unchanged)
 const HomeWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -73,26 +91,29 @@ const HeaderIntroWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   background-color: ${({ theme }) => theme.colors.purple[100]};
   width: 100%;
 `;
 
-const IntroSection = styled.section`
+const IntroSection = styled.div`
   display: flex;
-  flex-direction: column;
   align-items: center;
   text-align: center;
+  justify-content: center;
   padding: 32px;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 1200px;
+  width: 80%;
+  gap: 64px;
+`;
+
+const TextWrapper = styled.div`
+  flex-direction: column;
 `;
 
 const IntroText = styled.h1`
-  font-size: ${({ theme }) => theme.typography.T2.size};
-  font-weight: ${({ theme }) => theme.typography.T2.weight};
+  font-size: ${({ theme }) => theme.typography.T3.size};
+  font-weight: ${({ theme }) => theme.typography.T1.weight};
   color: ${({ theme }) => theme.colors.black};
-  margin-bottom: 8px;
 `;
 
 const Highlight = styled.span`
@@ -106,12 +127,12 @@ const SubText = styled.p`
 
 const ButtonWrapper = styled.div`
   display: flex;
-  gap: 16px;
-  margin-top: 16px;
+  gap: 32px;
 `;
 
 const ActionButton = styled.button<{ color: "green" | "blue" }>`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: ${({ color, theme }) =>
@@ -119,17 +140,24 @@ const ActionButton = styled.button<{ color: "green" | "blue" }>`
   color: ${({ theme }) => theme.colors.white};
   border: none;
   border-radius: 8px;
-  padding: 16px 24px;
-  font-size: ${({ theme }) => theme.typography.T4.size};
+  padding: 16px 16px 12px 16px;
+  width: 144px;
+  font-size: ${({ theme }) => theme.typography.T5.size};
   font-weight: ${({ theme }) => theme.typography.T4.weight};
   cursor: pointer;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
   transition: background-color 0.3s ease;
+  gap: 16px; /* 아이콘과 텍스트 간 간격 */
 
   &:hover {
     background-color: ${({ color, theme }) =>
-      color === "green" ? theme.colors.green[500] : theme.colors.blue[500]};
+      color === "green" ? theme.colors.green[500] : theme.colors.blue[500]}; /* Slightly darker on hover */
   }
+`;
+
+const ActionIcon = styled.img`
+  width: 80px;
+  height: 80px;
 `;
 
 const SearchSection = styled.div`

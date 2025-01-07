@@ -4,7 +4,7 @@ import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import RadioGroup from "../components/RadioGroup/RadioGroup";
 import BotButton from "../components/BotButton/BotButton";
-import mockMerchandises from "../data/mockMerchandises";
+import initialMockMerchandises from "../data/mockMerchandises"; // 초기 데이터 가져오기
 import { useNavigate } from "react-router-dom";
 
 const categories = ["모빌리티", "냉장고", "전자제품", "책/문서", "기프티콘", "원룸/오피스텔", "기타"];
@@ -17,6 +17,7 @@ const Sell: React.FC = () => {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [images, setImages] = useState<string[]>([]);
+  const [merchandises, setMerchandises] = useState(initialMockMerchandises); // 상태로 관리
 
   const navigate = useNavigate();
 
@@ -34,28 +35,56 @@ const Sell: React.FC = () => {
       return;
     }
 
-  const newPost = {
-    id: mockMerchandises.length + 1,
-    imageSrc: images,
-    title,
-    status: "available" as "available" | "reserved" | "completed", // 타입에 맞는 값 사용
-    condition: condition as "best" | "good" | "average" | "bad" | "very_bad", // 타입 단언
-    price,
-    sellerName: "현재 사용자",
-    date: new Date().toISOString().split("T")[0],
-    category,
-    description,
+    const newPost = {
+      id: merchandises.length + 1,
+      imageSrc: images,
+      title,
+      status: "available" as "available" | "reserved" | "completed",
+      condition: convertConditionToType(condition),
+      price,
+      sellerName: "현재 사용자",
+      date: new Date().toISOString().split("T")[0],
+      category: convertCategoryToType(category),
+      description,
+    };
+
+    setMerchandises((prev) => [newPost, ...prev]); // 상태 업데이트
+    alert("게시글이 등록되었습니다!");
+    navigate("/content/all"); // 게시글 목록으로 이동
   };
 
-    mockMerchandises.push(newPost);
-    alert("게시글이 등록되었습니다!");
-    navigate("/");
+  const convertConditionToType = (condition: string | null) => {
+    const conditionMap: Record<string, "best" | "good" | "average" | "bad" | "very_bad"> = {
+      "미개봉 / 최상": "best",
+      "상태 좋음": "good",
+      "양호 / 보통": "average",
+      "상태 별로": "bad",
+      "부품용 / 고장": "very_bad",
+    };
+    return conditionMap[condition || "양호 / 보통"];
+  };
+
+  const convertCategoryToType = (category: string | null) => {
+    const categoryMap: Record<
+      string,
+      "mobility" | "refrigerator" | "electronics" | "books" | "gifticon" | "office" | "others"
+    > = {
+      "모빌리티": "mobility",
+      "냉장고": "refrigerator",
+      "전자제품": "electronics",
+      "책/문서": "books",
+      "기프티콘": "gifticon",
+      "원룸/오피스텔": "office",
+      "기타": "others",
+    };
+    return categoryMap[category || "기타"];
   };
 
   return (
     <SellWrapper>
       <Header />
       <FormWrapper>
+        {/* 제목 */}
         <Section>
           <Label>제목</Label>
           <Input
@@ -66,20 +95,23 @@ const Sell: React.FC = () => {
           />
         </Section>
 
+        {/* 카테고리 */}
         <Section>
-            <Label>카테고리</Label>
-            <RadioGroupWrapper>
-                <RadioGroup options={categories} onChange={setCategory} />
-            </RadioGroupWrapper>
-            </Section>
-
-            <Section>
-            <Label>상태</Label>
-            <RadioGroupWrapper>
-                <RadioGroup options={conditions} onChange={setCondition} />
-            </RadioGroupWrapper>
+          <Label>카테고리</Label>
+          <RadioGroupWrapper>
+            <RadioGroup options={categories} onChange={setCategory} />
+          </RadioGroupWrapper>
         </Section>
 
+        {/* 상태 */}
+        <Section>
+          <Label>상태</Label>
+          <RadioGroupWrapper>
+            <RadioGroup options={conditions} onChange={setCondition} />
+          </RadioGroupWrapper>
+        </Section>
+
+        {/* 가격 */}
         <Section>
           <Label>판매 가격</Label>
           <Input
@@ -90,6 +122,7 @@ const Sell: React.FC = () => {
           />
         </Section>
 
+        {/* 내용 */}
         <Section>
           <Label>내용</Label>
           <TextArea
@@ -99,6 +132,7 @@ const Sell: React.FC = () => {
           />
         </Section>
 
+        {/* 사진 */}
         <Section>
           <Label>사진</Label>
           <ImageUploadWrapper>
@@ -126,7 +160,6 @@ const Sell: React.FC = () => {
 
 export default Sell;
 
-
 // Styled Components
 const SellWrapper = styled.div`
   display: flex;
@@ -152,10 +185,11 @@ const Section = styled.div`
   align-items: stretch; /* Ensures purple box matches the height of the content */
   width: 100%;
   background-color: ${({ theme }) => theme.colors.white}; /* White background for all sections */
+  border-radius: 16px;
 `;
 
 const Label = styled.label`
-  width: 200px; /* Fixed width for the label column */
+  width: 120px; /* Fixed width for the label column */
   background-color: ${({ theme }) => theme.colors.primary}; /* Primary color background */
   color: ${({ theme }) => theme.colors.white}; /* White text for labels */
   padding: 16px;
@@ -165,6 +199,7 @@ const Label = styled.label`
   display: flex;
   align-items: center; /* Align text vertically */
   justify-content: center; /* Align text horizontally */
+  border-radius: 16px 0 0 16px;
 `;
 
 const Input = styled.input`
@@ -174,6 +209,8 @@ const Input = styled.input`
   font-family: Pretendard;
   font-size: ${({ theme }) => theme.typography.T5.size};
   background-color: ${({ theme }) => theme.colors.white}; /* Unified white background */
+  border-radius: 16px;
+  outline: none;
 `;
 
 const TextArea = styled.textarea`
@@ -182,9 +219,11 @@ const TextArea = styled.textarea`
   border: none; /* Removed border */
   font-size: ${({ theme }) => theme.typography.T5.size};
   font-family: Pretendard;
-  height: 100px;
+  height: 160px;
   resize: none;
   background-color: ${({ theme }) => theme.colors.white}; /* Unified white background */
+  border-radius: 16px;
+  outline: none;
 `;
 
 const RadioGroupWrapper = styled.div`
@@ -194,12 +233,14 @@ const RadioGroupWrapper = styled.div`
   flex-direction: column;
   gap: 8px;
   background-color: ${({ theme }) => theme.colors.white}; /* White background */
+  border-radius: 16px;
 `;
 
 const ImageUploadWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 16px;
+  padding: 16px;
   flex: 1;
 `;
 
@@ -207,6 +248,7 @@ const UploadedImage = styled.img`
   width: 240px;
   height: 240px;
   object-fit: cover;
+  border-radius: 16px;
 `;
 
 const ImageUploadButton = styled.label`
@@ -225,4 +267,5 @@ const ImageUploadButton = styled.label`
   input {
     display: none;
   }
+  border-radius: 16px;
 `;

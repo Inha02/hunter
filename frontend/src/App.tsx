@@ -7,6 +7,7 @@ import Item from "./pages/Item";
 import theme from "./styles/theme";
 import GlobalStyle from "./styles/GlobalStyle";
 import Sell from "./pages/Sell";
+import KakaoCallback from "./pages/kakaoCallback";
 
 const App: React.FC = () => {
   return (
@@ -22,6 +23,7 @@ const App: React.FC = () => {
           <Route path="/content/:category/:id" element={<Item />} />
           {/* 판매하기 페이지 */}
           <Route path="/sell" element={<Sell />} />
+          <Route path="/auth/kakao/callback" element={<KakaoCallback />} />
         </Routes>
       </Router>
     </ThemeProvider>

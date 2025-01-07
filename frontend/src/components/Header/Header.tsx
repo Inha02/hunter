@@ -19,9 +19,15 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ isLoggedIn, username }) => {
   // 네이버 로그인 핸들러
-  const handleNaverLogin = () => {
-    window.location.href = "http://localhost:5001/auth/naver";
-  };
+  function loginWithKakao() {
+    const REDIRECT_URI = `${process.env.REACT_APP_KAKAO_REDIRECT_URL}`
+
+    const CLIENT_ID = `${process.env.REACT_APP_RESTAPI_KAKAO_APP_KEY}`
+    const KAKAO_AUTH_URL = `https:kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+    window.location.href = KAKAO_AUTH_URL
+  }
+
+
 
   const navigate = useNavigate();
 
@@ -49,21 +55,21 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, username }) => {
       {isLoggedIn ? (
         <UserSection>
           <UserName>{username} 님</UserName>
-            <AuthButton
+          <AuthButton
             onClick={() => {
               isLoggedIn = false;
               window.location.href = "http://localhost:3000";
             }}
-            >
+          >
             Log Out
-            </AuthButton>
+          </AuthButton>
         </UserSection>
       ) : (
         <AuthSection>
           <AuthButton>
             <span>N</span> Sign Up
           </AuthButton>
-          <AuthButton onClick={handleNaverLogin}>
+          <AuthButton onClick={loginWithKakao}>
             <span>N</span> Login
           </AuthButton>
         </AuthSection>

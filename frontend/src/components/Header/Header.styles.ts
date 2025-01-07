@@ -8,8 +8,8 @@ export const HeaderContainer = styled.header`
   align-items: center;
   padding: 8px 32px;
   background-color: ${(props) => props.theme.colors.white};
-  border-bottom: 1px solid ${(props) => props.theme.colors.black};
   box-sizing: border-box;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 `;
 
 // 로고와 네비게이션을 묶는 Wrapper
@@ -53,15 +53,17 @@ export const AuthButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 16px;
+  padding: 4px 16px 4px 8px;
   font-size: ${(props) => props.theme.typography.T4.size};
   font-weight: ${(props) => props.theme.typography.T4.weight};
   color: ${(props) => props.theme.colors.black};
-  border: 2px solid ${(props) => props.theme.colors.black};
-  background-color: ${(props) => props.theme.colors.white};
+  border: 0;
+  background-color: ${(props) => props.theme.colors.kakao};
   border-radius: 50px; /* 끝을 둥글게 */
   cursor: pointer;
   margin-left: 16px;
+  gap: 8px;
+  box-shadow: ${(props) => "0px 2px 2px rgba(0, 0, 0, 0.2)"};
 
   &:first-child {
     margin-left: 0;
@@ -98,6 +100,17 @@ export const UserSection = styled(AuthSection)`
     padding: 8px 16px;
     cursor: pointer;
   }
+`;
+
+export const LogoFrame = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background-image: url('/assets/icons/kakao_logo.png');
+  background-size: contain;
+  background-repeat: no-repeat;
 `;
 
 // UserName 스타일 추가

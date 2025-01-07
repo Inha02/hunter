@@ -19,6 +19,7 @@ export const Input = styled.input<{ isFilled: boolean }>`
   flex: 1;
   border: none;
   outline: none;
+  font-family: "Pretendard";
   font-size: ${({ theme }) => theme.typography.T5.size};
   font-weight: ${({ theme }) => theme.typography.T5.weight};
   color: ${({ isFilled, theme }) =>

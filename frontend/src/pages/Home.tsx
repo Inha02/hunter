@@ -38,12 +38,12 @@ const Home: React.FC = () => {
         {/* Intro Section */}
         <IntroSection>
           <TextWrapper>
-            <IntroText>
-              KAIST 4천 학우의 내 손안의 캠퍼스 마켓, <Highlight>HUN:ter!</Highlight>
-            </IntroText>
             <SubText>
-              학생들을 위한, 학생들에 의한, 가장 효율적인 거래 플랫폼!
+              헌 가치를 나누는 터, <Highlight>헌터</Highlight> 에서
             </SubText>
+            <IntroText>
+              새로운 의미를 발견하는 <Highlight>HUN:ter</Highlight> 가 되어보세요
+            </IntroText>
           </TextWrapper>
           <ButtonWrapper>
             <ActionButton color="green" onClick={handleSellButtonClick}>
@@ -82,8 +82,8 @@ const HomeWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
-  background-color: ${({ theme }) => theme.colors.gray[100]};
+  gap: 0px;
+  background-color: ${({ theme }) => theme.colors.purple[100]};
   min-height: 100vh;
 `;
 
@@ -101,7 +101,7 @@ const IntroSection = styled.div`
   align-items: center;
   text-align: center;
   justify-content: center;
-  padding: 32px;
+  padding: 48px;
   width: 80%;
   gap: 64px;
 `;
@@ -113,6 +113,7 @@ const TextWrapper = styled.div`
 const IntroText = styled.h1`
   font-size: ${({ theme }) => theme.typography.T3.size};
   font-weight: ${({ theme }) => theme.typography.T1.weight};
+  font-family: "Pretendard";
   color: ${({ theme }) => theme.colors.black};
 `;
 
@@ -122,6 +123,8 @@ const Highlight = styled.span`
 
 const SubText = styled.p`
   font-size: ${({ theme }) => theme.typography.T4.size};
+  font-weight: ${({ theme }) => theme.typography.T4.weight};
+  font-family: "Pretendard";
   color: ${({ theme }) => theme.colors.black};
 `;
 
@@ -145,7 +148,7 @@ const ActionButton = styled.button<{ color: "green" | "blue" }>`
   font-size: ${({ theme }) => theme.typography.T5.size};
   font-weight: ${({ theme }) => theme.typography.T4.weight};
   cursor: pointer;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
   transition: background-color 0.3s ease;
   gap: 16px; /* 아이콘과 텍스트 간 간격 */
 
@@ -171,7 +174,9 @@ const SharedContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%; /* 화면 전체 너비 */
-  max-width: 1264px; /* 최대 너비를 지정 */
   margin: 0 auto; /* 가운데 정렬 */
-  gap: 64px;
+  gap: 32px;
+  padding: 48px 0;
+  background-color: ${({ theme }) => theme.colors.purple[400]};
+  box-shadow: ${(props) => "16px 0 16px 0 rgba(0, 0, 0, 0.4)"};
 `;

@@ -24,7 +24,20 @@ const AuthContext = createContext<{
   logout: () => {},
 });
 
+
+const Header: React.FC<HeaderProps> = ({ isLoggedIn, username }) => {
+  // 네이버 로그인 핸들러
+  function loginWithKakao() {
+    const REDIRECT_URI = `${process.env.REACT_APP_KAKAO_REDIRECT_URL}`
+
+    const CLIENT_ID = `${process.env.REACT_APP_RESTAPI_KAKAO_APP_KEY}`
+    const KAKAO_AUTH_URL = `https:kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+    window.location.href = KAKAO_AUTH_URL
+  }
+
+
 export const useAuth = () => useContext(AuthContext);
+
 
 const Header: React.FC = () => {
   const { isLoggedIn, username, login, logout } = useAuth();
@@ -62,14 +75,29 @@ const Header: React.FC = () => {
       {isLoggedIn ? (
         <UserSection>
           <UserName>{username} 님</UserName>
-          <AuthButton onClick={logout}>Log Out</AuthButton>
+
+          <AuthButton
+            onClick={() => {
+              isLoggedIn = false;
+              window.location.href = "http://localhost:3000";
+            }}
+          >
+            Log Out
+          </AuthButton>
+
+          //<AuthButton onClick={logout}>Log Out</AuthButton>
+
         </UserSection>
       ) : (
         <AuthSection>
           <AuthButton>
             <span>N</span> Sign Up
           </AuthButton>
-          <AuthButton onClick={() => login("currentUser")}>
+
+          <AuthButton onClick={loginWithKakao}>
+
+          //<AuthButton onClick={() => login("currentUser")}>
+
             <span>N</span> Login
           </AuthButton>
         </AuthSection>

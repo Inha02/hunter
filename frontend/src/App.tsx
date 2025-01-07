@@ -8,14 +8,19 @@ import Item from "./pages/Item";
 import theme from "./styles/theme";
 import GlobalStyle from "./styles/GlobalStyle";
 import Sell from "./pages/Sell";
+
+import KakaoCallback from "./pages/kakaoCallback";
+
 import { MerchandiseProvider } from "./context/MerchandiseContext";
 import Mydeal from "./pages/Mydeal";
 import { AuthProvider } from "./components/Header/Header";
+
 
 const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
+
       <AuthProvider>
         <MerchandiseProvider>
           <Router>
@@ -30,6 +35,7 @@ const App: React.FC = () => {
               <Route path="/sell" element={<Sell />} />
               {/* 나의 거래 페이지 */}
               <Route path="/mydeal" element={<Mydeal />} />
+              <Route path="/auth/kakao/callback" element={<KakaoCallback />} />
               {/* Catch-all route for undefined paths */}
               <Route path="*" element={<NotFound />} />
             </Routes>

@@ -26,12 +26,12 @@ export const NaviIconWrapper = styled.div<WrapperProps>`
   /* y축 그림자만 설정 */
   box-shadow: ${(props) =>
     props.mode === "Clicked"
-      ? "0px 6px 6px rgba(0, 0, 0, 0.15)" // 클릭 상태: y축 그림자
-      : "0px 3px 3px rgba(0, 0, 0, 0.1)"}; // 기본 상태: y축 그림자
+      ? "0px 10px 10px rgba(0, 0, 0, 0.2)" // 클릭 상태: y축 그림자
+      : "0px 5px 5px rgba(0, 0, 0, 0.2)"}; // 기본 상태: y축 그림자
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.gray[100]};
-    box-shadow: ${(props) => "0px 4px 4px rgba(0, 0, 0, 0.1)"}; // 호버 시 y축 그림자
+    background-color: ${(props) => props.theme.colors.white};
+    box-shadow: ${(props) => "0px 10px 10px rgba(0, 0, 0, 0.2)"}; // 호버 시 y축 그림자
   }
 `;
 

@@ -6,6 +6,7 @@ const theme: DefaultTheme = {
     white: "#FFFFFF",
     black: "#111111",
     naver: "#03C75A",
+    kakao: "#FEE500",
     green: {
       500: "#107F4F",
       300: "#8DDD97",

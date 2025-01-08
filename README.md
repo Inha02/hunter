@@ -1,4 +1,6 @@
 # HUN:ter
+<img width="1277" alt="image" src="https://github.com/user-attachments/assets/abc5764d-ced1-4295-bdc7-89234ee68b8c" />
+
 헌 가치를 나누는 터, 헌터에서
 
 새로운 의미를 발견하는 Hunter가 되어보세요!

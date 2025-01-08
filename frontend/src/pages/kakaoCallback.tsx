@@ -1,17 +1,18 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const KakaoCallback: React.FC = () => {
+const KakaoCallback = () => {
+    const [userNickname, setUserNickname] = useState(null);
     const navigate = useNavigate();
-    const isProcessing = useRef(false); // 중복 실행 방지 플래그
+    const isProcessing = useRef(false); // Prevent duplicate processing
 
     useEffect(() => {
         if (isProcessing.current) {
-            // 이미 처리 중이라면 아무 작업도 하지 않음
+            // If already processing, do nothing
             return;
         }
-        isProcessing.current = true; // 처리 시작
+        isProcessing.current = true; // Start processing
 
         const params = new URL(document.location.toString()).searchParams;
         const code = params.get("code");
@@ -21,7 +22,7 @@ const KakaoCallback: React.FC = () => {
         const client_id = process.env.REACT_APP_RESTAPI_KAKAO_APP_KEY;
         const REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URL;
 
-        // 환경 변수 검증
+        // Validate environment variables
         if (!client_id) {
             console.error("REACT_APP_RESTAPI_KAKAO_APP_KEY 환경 변수가 설정되지 않았습니다.");
             return;
@@ -37,7 +38,7 @@ const KakaoCallback: React.FC = () => {
             return;
         }
 
-        // Authorization Code 재사용 방지
+        // Prevent reuse of authorization code
         const storedCode = sessionStorage.getItem('kakao_auth_code');
         if (code === storedCode) {
             console.error("Authorization code가 이미 사용되었습니다.");
@@ -46,7 +47,7 @@ const KakaoCallback: React.FC = () => {
             sessionStorage.setItem('kakao_auth_code', code);
         }
 
-        // 매개변수를 URLSearchParams로 설정
+        // Prepare data for token request
         const data = new URLSearchParams();
         data.append('grant_type', grant_type);
         data.append('client_id', client_id);
@@ -91,15 +92,15 @@ const KakaoCallback: React.FC = () => {
                     console.log("User_NICKNAME:", User_NICKNAME);
 
                     if (User_ID && User_NICKNAME) {
-                        // 백엔드로 데이터 전송
+                        // Send data to backend
                         axios.post("http://localhost:5001/api/users", {
                             User_ID,
                             User_NICKNAME,
                         })
                         .then((response) => {
                             console.log("데이터 저장 성공:", response.data);
-                            // 필요 시 페이지 이동
-                            // navigate('/success'); 
+                            setUserNickname(User_NICKNAME); // Save nickname in state
+                            navigate("/", { state: { userNickname: User_NICKNAME } }); // Redirect to home
                         })
                         .catch((error) => {
                             console.error("데이터 저장 실패:", error);
@@ -117,13 +118,13 @@ const KakaoCallback: React.FC = () => {
         })
         .catch((error) => {
             if (error.response) {
-                // 서버가 응답을 했지만 상태 코드가 2xx가 아님
+                // Server responded with a status other than 2xx
                 console.error("토큰 요청 실패: ", error.response.data);
             } else if (error.request) {
-                // 요청이 만들어졌으나 응답을 받지 못함
+                // Request was made but no response received
                 console.error("토큰 요청 실패: 요청이 이루어졌으나 응답을 받지 못했습니다.", error.request);
             } else {
-                // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생함
+                // Something happened in setting up the request
                 console.error("토큰 요청 실패: ", error.message);
             }
         });
@@ -132,6 +133,7 @@ const KakaoCallback: React.FC = () => {
     return (
         <div>
             <h4>로그인 중..</h4>
+            {userNickname && <p>환영합니다, {userNickname}님!</p>}
         </div>
     );
 };

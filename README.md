@@ -1,5 +1,4 @@
 # HUN:ter
-<img width="1277" alt="image" src="https://github.com/user-attachments/assets/abc5764d-ced1-4295-bdc7-89234ee68b8c" />
 
 헌 가치를 나누는 터, 헌터에서
 
@@ -31,6 +30,9 @@ SMWU 인공지능공학부 22학번 최인하
 
 
 # 주요기능
+<img width="1277" alt="image" src="https://github.com/user-attachments/assets/abc5764d-ced1-4295-bdc7-89234ee68b8c" />
+
+
 1. **로그인**
 
 카카오를 통해 소셜 로그인을 구현했습니다

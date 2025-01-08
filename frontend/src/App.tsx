@@ -10,6 +10,7 @@ import GlobalStyle from "./styles/GlobalStyle";
 import Sell from "./pages/Sell";
 
 import KakaoCallback from "./pages/kakaoCallback";
+import { UserProvider } from "./UserContext";
 
 import { MerchandiseProvider } from "./context/MerchandiseContext";
 import Mydeal from "./pages/Mydeal";

@@ -24,7 +24,7 @@ const ConditionWrapper = styled.div<{ type: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 160px;
+  width: 144px;
   padding: 4px 8px;
   border-radius: 8px;
   font-size: ${({ theme }) => theme.typography.T5.size};

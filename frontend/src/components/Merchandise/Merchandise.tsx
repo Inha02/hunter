@@ -48,7 +48,7 @@ const Merchandise: React.FC<ExtendedMerchandiseProps> = ({
             <Status type={status} />
             <Condition type={condition} />
           </S.StatusConditionWrapper>
-          <S.Price>{price} 원</S.Price>
+          <S.Price>{Number(price).toLocaleString()} 원</S.Price>
           <S.SellerInfo>
             <span>👤</span>
             <span>{sellerName}</span>

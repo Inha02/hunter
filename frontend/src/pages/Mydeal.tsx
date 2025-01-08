@@ -1,5 +1,5 @@
 // src/pages/Mydeal.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
@@ -15,82 +15,89 @@ const Mydeal: React.FC = () => {
   const navigate = useNavigate();
   const { merchandises } = useMerchandise();
 
-  // Define the current user
-  const currentUser = "currentUser"; // Replace with actual user retrieval logic
+  // Retrieve the current user's username from localStorage
+  const [currentUser, setCurrentUser] = useState<string | null>(null);
 
-  // State management
+  useEffect(() => {
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setCurrentUser(storedUsername);
+    } else {
+      // If no user is logged in, redirect to home or login page
+      alert("로그인이 필요합니다!");
+      navigate("/"); // Redirect to Home or Login page
+    }
+  }, [navigate]);
+
+  // State management for search, filter, and pagination
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [showAvailableOnly, setShowAvailableOnly] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 10;
 
-  // Handle search
+  // Handle search input
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    // Implement search navigation if needed
+    setCurrentPage(1); // Reset to first page on new search
   };
 
-  // Handle toggle
+  // Handle toggle for availability
   const handleToggle = () => setShowAvailableOnly(!showAvailableOnly);
 
-  // Handle page change
+  // Handle page change for pagination
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Handle Merchandise click
+  // Handle Merchandise item click to navigate to its detail page
   const handleMerchandiseClick = (category: string, id: string) => {
     navigate(`/content/${category}/${id}`);
   };
 
-  // Filter merchandises for Mydeal
+  // Filter merchandises for Mydeal based on the current user
   const myDealItems: Array<{
     merchandise: MerchandiseProps;
     dealMode: "Buy" | "Sell";
     relevantDeals: SearchDeal[];
-  }> = [];
+  }> = merchandises.reduce((acc, item) => {
+    if (!currentUser) return acc; // If no user, do not process
 
-  merchandises.forEach((item) => {
     if (item.sellerName === currentUser) {
-      // Sell deals: Others inquiring about your items
-      if (item.deals && item.deals.length > 0) {
-        myDealItems.push({
-          merchandise: item,
-          dealMode: "Sell",
-          relevantDeals: item.deals as SearchDeal[],
-        });
-      } else {
-        // Even if there are no deals, show your own posted items
-        myDealItems.push({
-          merchandise: item,
-          dealMode: "Sell",
-          relevantDeals: [],
-        });
-      }
-    } else {
-      // Buy deals: You inquiring about others' items
-      const buyDeals = (item.deals || []).filter(
-        (deal: SearchDeal) => deal.user === currentUser
-      ) as SearchDeal[];
-      if (buyDeals.length > 0) {
-        myDealItems.push({
-          merchandise: item,
-          dealMode: "Buy",
-          relevantDeals: buyDeals,
-        });
-      }
+      // Sell deals: Items the user is selling
+      acc.push({
+        merchandise: item,
+        dealMode: "Sell",
+        relevantDeals: item.deals || [],
+      });
     }
-  });
 
-  // Apply search and filter
-  const filteredMyDealItems = myDealItems.filter(({ merchandise, dealMode, relevantDeals }) => {
-    // Search filter
+    // Buy deals: Items the user has inquired about
+    const userDeals = (item.deals || []).filter(
+      (deal: SearchDeal) => deal.user === currentUser
+    );
+
+    if (userDeals.length > 0) {
+      acc.push({
+        merchandise: item,
+        dealMode: "Buy",
+        relevantDeals: userDeals,
+      });
+    }
+
+    return acc;
+  }, [] as Array<{
+    merchandise: MerchandiseProps;
+    dealMode: "Buy" | "Sell";
+    relevantDeals: SearchDeal[];
+  }>);
+
+  // Apply search and availability filters
+  const filteredMyDealItems = myDealItems.filter(({ merchandise }) => {
     const matchesSearch =
       searchQuery === "" ||
       merchandise.title.toLowerCase().includes(searchQuery.toLowerCase());
 
-    // Availability filter
     const matchesAvailability =
       !showAvailableOnly || merchandise.status === "available";
 
@@ -120,7 +127,7 @@ const Mydeal: React.FC = () => {
       </SharedContainer>
 
       {/* Merchandise 목록 */}
-      {myDealItems.length > 0 ? (
+      {filteredMyDealItems.length > 0 ? (
         <MerchandiseList>
           {paginatedMyDealItems.map(({ merchandise, dealMode, relevantDeals }) => (
             <Merchandise

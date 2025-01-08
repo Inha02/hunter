@@ -1,5 +1,5 @@
 // src/pages/Content.tsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Merchandise from "../components/Merchandise/Merchandise";
@@ -75,20 +75,33 @@ const Content: React.FC = () => {
   }, [searchQuery]);
 
   // 카테고리, 검색어, 거래 가능 여부에 따른 필터링
-  const filteredMerchandises = merchandises.filter((item) => {
-    const matchesCategory =
-      clickedCategory === "all" || !clickedCategory || item.category === clickedCategory;
-    const matchesQuery = searchQuery === "" || item.title.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesAvailability = !showAvailableOnly || item.status === "available";
-    return matchesCategory && matchesQuery && matchesAvailability;
-  });
+  const filteredMerchandises = useMemo(() => {
+    return merchandises.filter((item) => {
+      const matchesCategory =
+        clickedCategory === "all" || !clickedCategory || item.category === clickedCategory;
+      const matchesQuery =
+        searchQuery === "" || item.title.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesAvailability = !showAvailableOnly || item.status === "available";
+      return matchesCategory && matchesQuery && matchesAvailability;
+    });
+  }, [merchandises, clickedCategory, searchQuery, showAvailableOnly]);
+
+  // 정렬: 최근 날짜 순 (내림차순)
+  const sortedMerchandises = useMemo(() => {
+    return [...filteredMerchandises].sort((a, b) => {
+      const dateA = new Date(a.date).getTime();
+      const dateB = new Date(b.date).getTime();
+      return dateB - dateA; // 내림차순 정렬
+    });
+  }, [filteredMerchandises]);
 
   // 페이지네이션 계산
-  const totalPages = Math.ceil(filteredMerchandises.length / itemsPerPage);
-  const paginatedMerchandises = filteredMerchandises.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const totalPages = Math.ceil(sortedMerchandises.length / itemsPerPage);
+  const paginatedMerchandises = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    return sortedMerchandises.slice(start, end);
+  }, [sortedMerchandises, currentPage, itemsPerPage]);
 
   // Merchandise 클릭 시 이동 함수
   const handleMerchandiseClick = (category: string, id: string) => { // Changed id type to string
@@ -123,7 +136,7 @@ const Content: React.FC = () => {
       {/* Merchandise 목록 */}
       {clickedCategory !== "secret" && (
         <>
-          {filteredMerchandises.length > 0 ? (
+          {sortedMerchandises.length > 0 ? ( // Changed from filteredMerchandises to sortedMerchandises
             <MerchandiseList>
               {paginatedMerchandises.map((item) => (
                 <Merchandise

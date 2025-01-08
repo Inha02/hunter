@@ -38,7 +38,7 @@ const Item: React.FC = () => {
   const handleContactClick = () => {
     // Show an alert or call addDeal if you want to record a buy
     
-    alert(`판매자 ${item.sellerName}님과 연락합니다.`);
+    alert(`판매자 ${item.sellerName}님께 고객님의 연락처를 전달합니다.`);
   };
 
   // Image slider
@@ -86,7 +86,7 @@ const Item: React.FC = () => {
               <Status type={item.status} />
               <Condition type={item.condition} />
             </StatusConditionWrapper>
-            <Price>{item.price}원</Price>
+            <Price>{Number(item.price).toLocaleString()}원</Price>
             <SellerInfo>
               <span>👤 {item.sellerName}</span>
               <span>{item.date}</span>
@@ -175,6 +175,8 @@ const NoImageWrapper = styled.div`
   width: 100%;
   height: 100%;
   font-size: ${({ theme }) => theme.typography.T3.size};
+  font-weight: ${({ theme }) => theme.typography.T3.weight};
+  font-family: "Pretendard";
   color: ${({ theme }) => theme.colors.gray[600]};
   border: 1px solid ${({ theme }) => theme.colors.gray[300]};
   border-radius: 12px;

@@ -1,9 +1,11 @@
+// src/components/KakaoCallback/KakaoCallback.tsx
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const KakaoCallback = () => {
-    const [userNickname, setUserNickname] = useState(null);
+const KakaoCallback: React.FC = () => {
+    const [userNickname, setUserNickname] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(true); // Loading state
     const navigate = useNavigate();
     const isProcessing = useRef(false); // Prevent duplicate processing
 
@@ -25,16 +27,19 @@ const KakaoCallback = () => {
         // Validate environment variables
         if (!client_id) {
             console.error("REACT_APP_RESTAPI_KAKAO_APP_KEY 환경 변수가 설정되지 않았습니다.");
+            setIsLoading(false);
             return;
         }
 
         if (!REDIRECT_URI) {
             console.error("REACT_APP_KAKAO_REDIRECT_URL 환경 변수가 설정되지 않았습니다.");
+            setIsLoading(false);
             return;
         }
 
         if (!code) {
             console.error("URL에 code 파라미터가 없습니다.");
+            setIsLoading(false);
             return;
         }
 
@@ -42,6 +47,7 @@ const KakaoCallback = () => {
         const storedCode = sessionStorage.getItem('kakao_auth_code');
         if (code === storedCode) {
             console.error("Authorization code가 이미 사용되었습니다.");
+            setIsLoading(false);
             return;
         } else {
             sessionStorage.setItem('kakao_auth_code', code);
@@ -100,20 +106,27 @@ const KakaoCallback = () => {
                         .then((response) => {
                             console.log("데이터 저장 성공:", response.data);
                             setUserNickname(User_NICKNAME); // Save nickname in state
-                            navigate("/", { state: { userNickname: User_NICKNAME } }); // Redirect to home
+                            // Store username and login status in localStorage
+                            localStorage.setItem('username', User_NICKNAME);
+                            localStorage.setItem('isLoggedIn', 'true');
+                            navigate("/", { replace: true }); // Redirect to home
                         })
                         .catch((error) => {
                             console.error("데이터 저장 실패:", error);
+                            setIsLoading(false);
                         });
                     } else {
                         console.error("User_ID 또는 User_NICKNAME이 유효하지 않음");
+                        setIsLoading(false);
                     }
                 })
                 .catch((error) => {
                     console.error("카카오 사용자 정보 요청 실패:", error);
+                    setIsLoading(false);
                 });
             } else {
                 console.log("access_token 없음");
+                setIsLoading(false);
             }
         })
         .catch((error) => {
@@ -127,13 +140,17 @@ const KakaoCallback = () => {
                 // Something happened in setting up the request
                 console.error("토큰 요청 실패: ", error.message);
             }
+            setIsLoading(false);
         });
     }, [navigate]);
 
     return (
-        <div>
-            <h4>로그인 중..</h4>
-            {userNickname && <p>환영합니다, {userNickname}님!</p>}
+        <div style={{ paddingLeft: "16px" }}>
+            {isLoading ? (
+                <h4>로그인 중...</h4>
+            ) : (
+                userNickname && <p>환영합니다, {userNickname}님!</p>
+            )}
         </div>
     );
 };

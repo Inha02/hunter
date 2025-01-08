@@ -10,39 +10,38 @@ import GlobalStyle from "./styles/GlobalStyle";
 import Sell from "./pages/Sell";
 
 import KakaoCallback from "./pages/kakaoCallback";
-import { UserProvider } from "./UserContext";
 
 import { MerchandiseProvider } from "./context/MerchandiseContext";
 import Mydeal from "./pages/Mydeal";
-import { AuthProvider } from "./components/Header/Header";
 
+// Remove the AuthProvider import
+// import { AuthProvider } from "./components/Header/Header";
 
 const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
 
-      <AuthProvider>
-        <MerchandiseProvider>
-          <Router>
-            <Routes>
-              {/* 홈 페이지 */}
-              <Route path="/" element={<Home />} />
-              {/* 카테고리별 콘텐츠 페이지 */}
-              <Route path="/content/:category" element={<Content />} />
-              {/* 아이템 상세 페이지 */}
-              <Route path="/content/:category/:id" element={<Item />} />
-              {/* 판매하기 페이지 */}
-              <Route path="/sell" element={<Sell />} />
-              {/* 나의 거래 페이지 */}
-              <Route path="/mydeal" element={<Mydeal />} />
-              <Route path="/auth/kakao/callback" element={<KakaoCallback />} />
-              {/* Catch-all route for undefined paths */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Router>
-        </MerchandiseProvider>
-      </AuthProvider>
+      {/* Remove AuthProvider */}
+      <MerchandiseProvider>
+        <Router>
+          <Routes>
+            {/* 홈 페이지 */}
+            <Route path="/" element={<Home />} />
+            {/* 카테고리별 콘텐츠 페이지 */}
+            <Route path="/content/:category" element={<Content />} />
+            {/* 아이템 상세 페이지 */}
+            <Route path="/content/:category/:id" element={<Item />} />
+            {/* 판매하기 페이지 */}
+            <Route path="/sell" element={<Sell />} />
+            {/* 나의 거래 페이지 */}
+            <Route path="/mydeal" element={<Mydeal />} />
+            <Route path="/auth/kakao/callback" element={<KakaoCallback />} />
+            {/* Catch-all route for undefined paths */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Router>
+      </MerchandiseProvider>
     </ThemeProvider>
   );
 };

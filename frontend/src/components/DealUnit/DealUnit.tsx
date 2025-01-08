@@ -25,7 +25,7 @@ const DealUnit: React.FC<DealUnitProps> = (props) => {
     return (
       <S.DealUnitWrapper>
         <S.PriceSection>
-          <S.Price>{props.price}</S.Price>
+        <S.Price>{Number(props.price).toLocaleString()}</S.Price>
           <S.Currency>원</S.Currency>
         </S.PriceSection>
         <S.DetailsSection>

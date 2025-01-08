@@ -94,7 +94,7 @@ export const UserSection = styled(AuthSection)`
     font-size: ${(props) => props.theme.typography.T4.size};
     font-weight: ${(props) => props.theme.typography.T4.weight};
     color: ${(props) => props.theme.colors.black};
-    border: 2px solid ${(props) => props.theme.colors.black};
+    border: 2px solid ${(props) => props.theme.colors.gray[200]};
     background-color: ${(props) => props.theme.colors.white};
     border-radius: 50px; /* 끝을 둥글게 */
     padding: 8px 16px;

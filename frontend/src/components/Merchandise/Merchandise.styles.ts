@@ -15,12 +15,12 @@ export const MerchandiseWrapper = styled.div`
 
   max-width: 1230px;
 
-  @media (min-width: 1400px) {
+  @media (min-width: 1300px) {
     width: 1230px;
   }
 
-  @media (max-width: 1400px) {
-    width: 80%;
+  @media (max-width: 1300px) {
+    width: 90%;
   }
 `;
 

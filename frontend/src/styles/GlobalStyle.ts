@@ -9,7 +9,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    min-width: 1080px;
+    min-width: 1050px;
   }
 `;
 

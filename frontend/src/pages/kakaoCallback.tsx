@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const KakaoCallback = () => {
+
     useEffect(() => {
         const params = new URL(document.location.toString()).searchParams;
         const code = params.get("code");
@@ -23,8 +25,8 @@ const KakaoCallback = () => {
             )
             .then((res) => {
                 console.log(res);
-                const { data } = res;
-                const { access_token } = data;
+
+                const { access_token } = res.data;
 
                 if (access_token) {
                     console.log(`Bearer ${access_token}`);
@@ -43,25 +45,43 @@ const KakaoCallback = () => {
                             console.log("데이터 성공 : ");
                             console.log(res);
 
-                            axios
-                                .post("http://localhost:5000/api/users", res.data) // 서버의 엔드포인트로 POST 요청
-                                .then((serverRes) => {
-                                    console.log("서버 저장 성공:", serverRes.data);
-                                })
-                                .catch((err) => {
-                                    console.error("서버 저장 실패:", err);
-                                });
-                        });
+                            const { id: User_ID, properties } = res.data; // `id`는 유저 고유 ID
+                            const { nickname: User_NICKNAME } = properties; // 닉네임은 `properties.nickname`
 
+                            console.log("User_ID:", User_ID);
+                            console.log("User_NICKNAME:", User_NICKNAME);
+
+
+                            if (User_ID && User_NICKNAME) {
+                                // 백엔드로 데이터 전송
+                                axios
+                                    .post("http://localhost:5001/api/users", {
+                                        User_ID,
+                                        User_NICKNAME,
+                                    })
+                                    .then((response) => {
+                                        console.log("데이터 저장 성공:", response.data);
+                                    })
+                                    .catch((error) => {
+                                        console.error("데이터 저장 실패:", error);
+                                    });
+                            } else {
+                                console.error("User_ID 또는 User_NICKNAME이 유효하지 않음");
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("카카오 사용자 정보 요청 실패:", error);
+                        });
                 } else {
                     console.log("access_token 없음");
                 }
 
             });
+
     }, []);
     return (
         <div>
-            <h5>로그인 중</h5>
+            <h4>로그인 중..</h4>
         </div>
     );
 };

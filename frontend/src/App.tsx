@@ -8,6 +8,7 @@ import theme from "./styles/theme";
 import GlobalStyle from "./styles/GlobalStyle";
 import Sell from "./pages/Sell";
 import KakaoCallback from "./pages/kakaoCallback";
+import { UserProvider } from "./UserContext";
 
 const App: React.FC = () => {
   return (

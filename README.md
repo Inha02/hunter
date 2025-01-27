@@ -58,15 +58,3 @@ Backend : SMWU 인공지능공학부 22학번 최인하
 내가 판매하기를 통해서 등록한 물품을 확인할 수 있습니다.
 
 
-
-# 백엔드 시작하는 법
-
-cd backend -> yarn install -> yarn nodemon index
-
-### http://localhost:5001
-
-# 프론트엔드 시작하는 법
-
-cd frontend -> yarn install -> yarn start
-
-### http://localhost:3000
